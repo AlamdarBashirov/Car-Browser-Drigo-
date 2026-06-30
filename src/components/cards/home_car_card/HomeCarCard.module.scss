@@ -1,0 +1,111 @@
+@use '../../../styles/variables' as*;
+
+.car_card {
+    display: flex;
+    // background-color: green;
+    width: 48%;
+    padding: 16px 20px;
+    border-radius: $card-border-radius;
+    border: 1px solid $card-border-color;
+    cursor: default;
+    transition: .5s;
+    background-color: #FAF9FF   ;
+
+    &:hover {
+        transform: translateY(-5px);
+        transition: .5s;
+        -webkit-box-shadow: 0px 0px 15px 0px $card-border-color;
+        box-shadow: 0px 0px 15px 0px $card-border-color;
+    }
+
+    .car_card_container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+        row-gap: 20px;
+
+        .general_car_details {
+            display: flex;
+            flex-direction: column;
+            // width: 80%;
+            // background-color: red;
+            gap: 10px;
+
+            h4 {
+                font-size: 20px;
+            }
+
+            .details_box {
+                display: grid;
+                grid-template-columns: 1fr 1fr ;
+                gap: 20px;
+                align-items: center;
+                justify-content: stretch;
+                flex-wrap: wrap;
+                row-gap: 15px;
+
+                .detail_item {
+                    // background-color: gray;
+                    display: flex;
+                    gap: 5px;
+                    font-weight: 600;
+                    font-size: 16px;
+
+                    span {
+                        font-size: 16px;
+                        font-weight: 400;
+                    }
+                }
+            }
+        }
+
+        .aviability {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 12px;
+            border-radius: $card-border-radius;
+            color: white;
+            // background-color: brown;
+            &.available{
+                color: $card-border-color;
+                background-color: greenyellow;
+            }
+            &.unavailable{
+                background-color: red;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width:1100px){
+    .car_card{
+        .car_card_container{
+            .general_car_details{
+                .details_box{
+                    grid-template-columns: 1fr ;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width:768px){
+    .car_card{
+        width: 49%;
+        .car_card_container{
+            align-items: start;
+        }
+    }
+}
+@media screen and (max-width:674px){
+    .car_card{
+        width: 100%;
+        .car_card_container{
+            align-items: center;
+        }
+    }
+}

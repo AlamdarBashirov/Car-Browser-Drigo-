@@ -1,0 +1,16 @@
+@use '../../../styles/variables' as*;
+.site_header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    border-bottom: 2px solid $card-border-color;
+    background-color: #F2EEFF;
+    .site_header_container{
+        width: $container-width;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

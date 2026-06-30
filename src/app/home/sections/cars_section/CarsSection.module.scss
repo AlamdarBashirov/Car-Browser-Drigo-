@@ -1,0 +1,18 @@
+@use '../../../../styles/variables' as*;
+
+.cars_section{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    background-color: #F2EEFF;
+    .cars_section_container{
+        width: $container-width;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        row-gap: 30px;
+    }
+}
