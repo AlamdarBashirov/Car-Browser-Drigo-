@@ -1,0 +1,25 @@
+@use '../../../styles/variables' as*;
+
+.filters{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: $container-width;
+    gap: 20px;
+    .search_input{
+        border: 2px solid $card-border-color;
+        outline: none;
+        padding: 6px 10px;
+        width: 400px;
+    }
+    select{
+        padding: 5px 10px;
+        border: 2px solid $card-border-color;
+    }
+    label{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+}
