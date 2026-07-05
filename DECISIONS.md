@@ -1,0 +1,9 @@
+I implemented the debounce functionality using `useEffect` and `setTimeout`. Every time the user types a character, the application waits for 300 milliseconds before performing the search. If the user continues typing before the 300ms is over, the previous timer is cleared and a new one starts. After the user stops typing, the search is performed and the results are displayed.
+
+I keep all filter-related state in the `CarsSection` component because both `HomeCarsFilter` and `HomeCarCard` depend on that data. Keeping the state in the parent component made it easier to manage and pass the necessary values down to the child components.
+
+The newest part of this project for me was implementing URL synchronization. I used `useSearchParams` from React Router for this. It reads the query parameters from the URL, initializes the state based on those values, and then applies the corresponding filters. This way, refreshing the page keeps the same filtered view.
+
+If I had one more day, I would refactor the filtering logic into separate custom hooks or utility functions. At the moment, all the functionality and state management are handled inside the `CarsSection` component, which makes it larger and slightly harder to read. I actually had enough time to try this, but I do not have much experience with creating custom hooks yet, so I decided not to risk making the first task more complicated. I hope to improve this in the following tasks.
+
+I also tried to keep the project well organized by separating the components as much as possible and using CSS Modules for styling. I created a simple responsive design, and while I think a minimum width of around 300px would normally be enough, the current project remains usable even at around 230px.

@@ -1,16 +1,54 @@
-# React + Vite
+# DRIGO Internship – Week 1
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Car Browser
 
-Currently, two official plugins are available:
+This project is a solution for the **DRIGO Frontend Internship – Week 1** task.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Features
 
-## React Compiler
+* Search cars by name (case-insensitive)
+* 300ms custom debounce (without external libraries)
+* Filter by transmission
+* Filter by car type
+* Available only toggle
+* AND logic for combining filters
+* Sort by price (Low → High / High → Low)
+* Live results counter
+* Empty state with Reset Filters button
+* URL query synchronization (filters are preserved after page refresh)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Tech Stack
 
-## Expanding the ESLint configuration
+* React
+* Vite
+* React Router DOM
+* CSS Modules
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Getting Started
+
+1. Clone the repository
+
+```bash
+git clone <repository-url>
+```
+
+2. Install dependencies
+
+```bash
+npm install
+```
+
+3. Start the development server
+
+```bash
+npm run dev
+```
+
+The application will be available at the local URL shown in the terminal (usually http://localhost:5173).
+
+### Project Structure
+
+* `src/components` – reusable UI components
+* `src/app` – page sections
+* `src/data/cars.json` – local dataset
+* `DECISIONS.md` – answers to the required questions
