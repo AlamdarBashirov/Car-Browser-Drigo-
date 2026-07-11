@@ -1,9 +1,10 @@
 import HomeCarCard from '../../../../components/cards/home_car_card/HomeCarCard'
-import cars from "../../../../data/cars.json";
 import HomeCarsFilter from '../../../../components/filters/home_cars_filter/HomeCarsFilter'
 import styles from './CarsSection.module.scss'
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from "react-router-dom";
+import useCars from "../../../../hooks/useCars"
+import useDebounce from "../../../../hooks/useDebounce";
 
 
 const CarsSection = () => {
@@ -14,9 +15,7 @@ const CarsSection = () => {
         searchParams.get("search") || ""
     );
     
-    const [debouncedSearch, setDebouncedSearch] = useState(
-        searchParams.get("search") || ""
-    );
+    const debouncedSearch = useDebounce(search, 300);
     
     const [transmission, setTransmission] = useState(
         searchParams.get("transmission") || "All"
@@ -33,6 +32,13 @@ const CarsSection = () => {
     const [sort, setSort] = useState(
         searchParams.get("sort") || "default"
     );
+
+    const {
+        cars,
+        loading,
+        error,
+        retry,
+    } = useCars();
 
     const filteredCars = cars.filter((car) => {
 
@@ -81,15 +87,6 @@ const CarsSection = () => {
         setSearchParams({});
     };
 
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedSearch(search);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [search]);
-
     useEffect(() => {
 
         const params = {};
@@ -119,7 +116,26 @@ const CarsSection = () => {
         sort
     ]);
 
+    if (loading) {
+        return (
+            <div className={styles.cars_section}>
+                <h2>Loading cars...</h2>
+            </div>
+        );
+    }
+    if (error) {
+        return (
+            <div className={styles.cars_section}>
+                <h2>{error}</h2>
+    
+                <button onClick={retry}>
+                    Retry
+                </button>
+            </div>
+        );
+    }
     return (
+        
         <>
             <div className={styles.cars_section}>
                 <HomeCarsFilter
