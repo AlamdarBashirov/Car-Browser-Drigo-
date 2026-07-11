@@ -1,10 +1,12 @@
 import styles from './HomeCarCard.module.scss'
 import React from 'react'
+import { Link } from "react-router-dom";
 
 const HomeCarCard = ({ car }) => {
 
     return (
-        <div className={styles.car_card}>
+
+        <Link to={`/cars/${car.id}`} className={styles.car_card}>
             <div className={styles.car_card_container}>
                 <div className={styles.general_car_details}>
                     <h4>Car Details</h4>
@@ -24,7 +26,7 @@ const HomeCarCard = ({ car }) => {
             </div>
             <div className={styles.car_card_effect}>
             </div>
-        </div>
+        </Link>
     )
 }
 
