@@ -1,11 +1,13 @@
 import HomeCarCard from '../../../../components/cards/home_car_card/HomeCarCard'
 import HomeCarsFilter from '../../../../components/filters/home_cars_filter/HomeCarsFilter'
 import styles from './CarsSection.module.scss'
-import React, { useEffect, useState, useReducer } from 'react'
+import React, { useEffect, useState, useReducer, useMemo } from 'react'
 import { useSearchParams } from "react-router-dom";
 import useCars from "../../../../hooks/useCars"
 import useDebounce from "../../../../hooks/useDebounce";
 import { filterReducer, initialState, ACTIONS } from "../../../../reducers/filterReducer";
+import filterCars from "../../../../utils/filterCars";
+import sortCars from "../../../../utils/sortCars";
 
 
 const CarsSection = () => {
@@ -15,21 +17,28 @@ const CarsSection = () => {
 
     const [state, dispatch] = useReducer(filterReducer, {
         ...initialState,
-
+    
         search: searchParams.get("search") || "",
-
+    
         transmission: searchParams.get("transmission") || "All",
-
+    
         type: searchParams.get("type") || "All",
-
-        availableOnly:
-            searchParams.get("available") === "true",
-
-        sort:
-            searchParams.get("sort") || "default",
+    
+        availableOnly:searchParams.get("available") === "true",
+    
+        sort:searchParams.get("sort") || "default",
+    
+        priceMin:searchParams.get("minPrice") || "",
+    
+        priceMax:searchParams.get("maxPrice") || "",
     });
 
     const debouncedSearch = useDebounce(state.search, 300);
+    const debouncedMinPrice =
+        useDebounce(state.priceMin, 300);
+
+    const debouncedMaxPrice =
+        useDebounce(state.priceMax, 300);
     const {
         cars,
         loading,
@@ -37,41 +46,40 @@ const CarsSection = () => {
         retry,
     } = useCars();
 
-    const filteredCars = cars.filter((car) => {
+    const filteredCars = useMemo(() => {
+        return filterCars(cars, {
+            search: debouncedSearch,
 
-        const nameMatch =
-            car.name.toLowerCase().includes(debouncedSearch.toLowerCase());
+            transmission: state.transmission,
 
-        const transmissionMatch =
-            state.transmission === "All" ||
-            car.transmission === state.transmission;
+            type: state.type,
 
-        const typeMatch =
-            state.type === "All" ||
-            car.type === state.type;
+            availableOnly: state.availableOnly,
 
-        const availableMatch =
-            !state.availableOnly ||
-            car.available;
+            priceMin: debouncedMinPrice,
 
-        return (
-            nameMatch &&
-            transmissionMatch &&
-            typeMatch &&
-            availableMatch
+            priceMax: debouncedMaxPrice,
+        });
+
+    }, [
+        cars,
+        debouncedSearch,
+        state.transmission,
+        state.type,
+        state.availableOnly,
+        debouncedMinPrice,
+        debouncedMaxPrice,
+    ]);
+
+    const sortedCars = useMemo(() => {
+        return sortCars(
+            filteredCars,
+            state.sort
         );
-    });
-
-    const sortedCars = [...filteredCars].sort((a, b) => {
-
-        if (state.sort === "low-high")
-            return a.pricePerDay - b.pricePerDay;
-
-        if (state.sort === "high-low")
-            return b.pricePerDay - a.pricePerDay;
-
-        return 0;
-    });
+    }, [
+        filteredCars,
+        state.sort,
+    ]);
 
     const resetFilters = () => {
         dispatch({
@@ -82,32 +90,40 @@ const CarsSection = () => {
     };
 
     useEffect(() => {
-
         const params = {};
-
+    
         if (debouncedSearch)
             params.search = debouncedSearch;
-
+    
         if (state.transmission !== "All")
             params.transmission = state.transmission;
-
+    
         if (state.type !== "All")
             params.type = state.type;
-
+    
         if (state.availableOnly)
             params.available = "true";
-
+    
         if (state.sort !== "default")
             params.sort = state.sort;
-
+    
+        if (debouncedMinPrice)
+            params.minPrice = debouncedMinPrice;
+    
+        if (debouncedMaxPrice)
+            params.maxPrice = debouncedMaxPrice;
+    
         setSearchParams(params);
-
+    
     }, [
         debouncedSearch,
+        debouncedMinPrice,
+        debouncedMaxPrice,
         state.transmission,
         state.type,
         state.availableOnly,
         state.sort,
+        setSearchParams,
     ]);
 
     if (loading) {

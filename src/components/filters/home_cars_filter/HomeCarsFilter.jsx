@@ -31,6 +31,32 @@ const HomeCarsFilter = ({ state, dispatch }) => {
                 <option value="high-low">High → Low</option>
             </select>
 
+            <input
+                type="number"
+                placeholder="Min Price"
+                className={`${styles.search_input} ${styles.price_filter}`}
+                value={state.priceMin}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.SET_PRICE_MIN,
+                        payload: e.target.value,
+                    })
+                }
+            />
+
+            <input
+                type="number"
+                placeholder="Max Price"
+                className={`${styles.search_input} ${styles.price_filter}`}
+                value={state.priceMax}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.SET_PRICE_MAX,
+                        payload: e.target.value,
+                    })
+                }
+            />
+
             <select
                 value={state.transmission}
                 onChange={(e) =>

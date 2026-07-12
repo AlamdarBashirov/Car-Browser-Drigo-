@@ -4,6 +4,8 @@ export const initialState = {
     type: "All",
     availableOnly: false,
     sort: "default",
+    priceMin: "",
+    priceMax: "",
     page: 1,
 };
 
@@ -15,6 +17,8 @@ export const ACTIONS = {
     SET_SORT: "SET_SORT",
     SET_PAGE: "SET_PAGE",
     RESET: "RESET",
+    SET_PRICE_MIN: "SET_PRICE_MIN",
+    SET_PRICE_MAX: "SET_PRICE_MAX",
 };
 
 export function filterReducer(state, action) {
@@ -63,7 +67,19 @@ export function filterReducer(state, action) {
 
         case ACTIONS.RESET:
             return initialState;
+        case ACTIONS.SET_PRICE_MIN:
+            return {
+                ...state,
+                priceMin: action.payload,
+                page: 1,
+            };
 
+        case ACTIONS.SET_PRICE_MAX:
+            return {
+                ...state,
+                priceMax: action.payload,
+                page: 1,
+            };
         default:
             return state;
     }
