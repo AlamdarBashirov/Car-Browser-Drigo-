@@ -27,6 +27,26 @@
         width: 100%;
         flex-wrap: wrap;
         row-gap: 20px;
+        position: relative;
+
+        .favorite_btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        
+            border: none;
+            background: transparent;
+        
+            cursor: pointer;
+        
+            font-size: 24px;
+        
+            z-index: 10;
+
+            svg{
+                color: red;
+            }
+        }
 
         .general_car_details {
             display: flex;

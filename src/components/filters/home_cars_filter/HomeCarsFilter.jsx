@@ -71,21 +71,55 @@ const HomeCarsFilter = ({ state, dispatch }) => {
                 <option value="Manual">Manual</option>
             </select>
 
-            <select
-                value={state.type}
-                onChange={(e) =>
-                    dispatch({
-                        type: ACTIONS.SET_TYPE,
-                        payload: e.target.value,
-                    })
+            <div>
+                <p>Type</p>
+
+                {
+                    [
+                        "Economy",
+                        "Sedan",
+                        "SUV",
+                        "Luxury",
+                    ].map((type) => (
+
+                        <label key={type}>
+
+                            <input
+                                type="checkbox"
+
+                                checked={
+                                    state.types.includes(type)
+                                }
+
+                                onChange={() =>
+                                    dispatch({
+                                        type: ACTIONS.SET_TYPE,
+                                        payload: type,
+                                    })
+                                }
+                            />
+
+                            {type}
+
+                        </label>
+
+                    ))
                 }
-            >
-                <option value="All">All Types</option>
-                <option value="Economy">Economy</option>
-                <option value="Sedan">Sedan</option>
-                <option value="SUV">SUV</option>
-                <option value="Luxury">Luxury</option>
-            </select>
+            </div>
+
+            <label>
+                <input
+                    type="checkbox"
+                    checked={state.favoritesOnly}
+                    onChange={(e) =>
+                        dispatch({
+                            type: ACTIONS.SET_FAVORITES_ONLY,
+                            payload: e.target.checked,
+                        })
+                    }
+                />
+                Favorites Only
+            </label>
 
             <label>
                 <input

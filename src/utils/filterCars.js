@@ -11,8 +11,8 @@ const filterCars = (cars, filters) => {
             car.transmission === filters.transmission;
 
         const typeMatch =
-            filters.type === "All" ||
-            car.type === filters.type;
+            filters.types.length === 0 ||
+            filters.types.includes(car.type);
 
         const availableMatch =
             !filters.availableOnly ||
@@ -25,6 +25,10 @@ const filterCars = (cars, filters) => {
         const maxPriceMatch =
             !filters.priceMax ||
             car.pricePerDay <= Number(filters.priceMax);
+        
+        const favoriteMatch =
+            !filters.favoritesOnly ||
+            filters.favorites.includes(car.id);
 
         return (
             nameMatch &&
@@ -32,7 +36,8 @@ const filterCars = (cars, filters) => {
             typeMatch &&
             availableMatch &&
             minPriceMatch &&
-            maxPriceMatch
+            maxPriceMatch&&
+            favoriteMatch
         );
     });
 };

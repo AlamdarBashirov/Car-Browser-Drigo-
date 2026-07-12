@@ -1,11 +1,12 @@
 export const initialState = {
     search: "",
     transmission: "All",
-    type: "All",
+    types: [],
     availableOnly: false,
     sort: "default",
     priceMin: "",
     priceMax: "",
+    favoritesOnly: false,
     page: 1,
 };
 
@@ -19,6 +20,7 @@ export const ACTIONS = {
     RESET: "RESET",
     SET_PRICE_MIN: "SET_PRICE_MIN",
     SET_PRICE_MAX: "SET_PRICE_MAX",
+    SET_FAVORITES_ONLY: "SET_FAVORITES_ONLY",
 };
 
 export function filterReducer(state, action) {
@@ -39,12 +41,20 @@ export function filterReducer(state, action) {
                 page: 1,
             };
 
-        case ACTIONS.SET_TYPE:
+        case ACTIONS.SET_TYPE: {
+
+            const exists = state.types.includes(action.payload);
+
             return {
                 ...state,
-                type: action.payload,
+                types: exists
+                    ? state.types.filter(
+                        (type) => type !== action.payload
+                    )
+                    : [...state.types, action.payload],
                 page: 1,
             };
+        }
 
         case ACTIONS.SET_AVAILABLE:
             return {
@@ -78,6 +88,12 @@ export function filterReducer(state, action) {
             return {
                 ...state,
                 priceMax: action.payload,
+                page: 1,
+            };
+        case ACTIONS.SET_FAVORITES_ONLY:
+            return {
+                ...state,
+                favoritesOnly: action.payload,
                 page: 1,
             };
         default:

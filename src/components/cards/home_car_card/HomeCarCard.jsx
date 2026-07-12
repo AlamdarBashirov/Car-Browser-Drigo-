@@ -1,13 +1,31 @@
 import styles from './HomeCarCard.module.scss'
 import React from 'react'
 import { Link } from "react-router-dom";
+import { useFavoritesContext } from "../../../context/FavoritesContext";
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const HomeCarCard = ({ car }) => {
+
+    const {
+        toggleFavorite,
+        isFavorite,
+    } = useFavoritesContext();
 
     return (
 
         <Link to={`/cars/${car.id}`} className={styles.car_card}>
             <div className={styles.car_card_container}>
+                <button
+                    className={styles.favorite_btn}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        toggleFavorite(car.id);
+                    }}
+                >
+                    {isFavorite(car.id) ? <FaHeart /> : <FaRegHeart />}
+                </button>
                 <div className={styles.general_car_details}>
                     <h4>Car Details</h4>
                     <div className={styles.details_box}>

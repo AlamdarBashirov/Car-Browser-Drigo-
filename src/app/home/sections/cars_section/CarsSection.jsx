@@ -8,29 +8,34 @@ import useDebounce from "../../../../hooks/useDebounce";
 import { filterReducer, initialState, ACTIONS } from "../../../../reducers/filterReducer";
 import filterCars from "../../../../utils/filterCars";
 import sortCars from "../../../../utils/sortCars";
+import Pagination from "../../../../components/pagination/Pagination";
+import { useFavoritesContext } from "../../../../context/FavoritesContext"
 
 
 const CarsSection = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
+    const { favorites } = useFavoritesContext();
 
     const [state, dispatch] = useReducer(filterReducer, {
         ...initialState,
-    
+
         search: searchParams.get("search") || "",
-    
+
         transmission: searchParams.get("transmission") || "All",
-    
-        type: searchParams.get("type") || "All",
-    
-        availableOnly:searchParams.get("available") === "true",
-    
-        sort:searchParams.get("sort") || "default",
-    
-        priceMin:searchParams.get("minPrice") || "",
-    
-        priceMax:searchParams.get("maxPrice") || "",
+
+        types: searchParams.get("types") ? searchParams.get("types").split(",") : [],
+
+        availableOnly: searchParams.get("available") === "true",
+
+        sort: searchParams.get("sort") || "default",
+
+        priceMin: searchParams.get("minPrice") || "",
+
+        priceMax: searchParams.get("maxPrice") || "",
+
+        favoritesOnly: searchParams.get("favorites") === "true",
     });
 
     const debouncedSearch = useDebounce(state.search, 300);
@@ -49,26 +54,26 @@ const CarsSection = () => {
     const filteredCars = useMemo(() => {
         return filterCars(cars, {
             search: debouncedSearch,
-
             transmission: state.transmission,
-
-            type: state.type,
-
+            types: state.types,
             availableOnly: state.availableOnly,
-
             priceMin: debouncedMinPrice,
-
             priceMax: debouncedMaxPrice,
+            seats: state.seats,
+            favoritesOnly: state.favoritesOnly,
+            favorites,
         });
-
     }, [
         cars,
         debouncedSearch,
         state.transmission,
-        state.type,
+        state.types,
         state.availableOnly,
         debouncedMinPrice,
         debouncedMaxPrice,
+        state.seats,
+        state.favoritesOnly,
+        favorites,
     ]);
 
     const sortedCars = useMemo(() => {
@@ -81,6 +86,21 @@ const CarsSection = () => {
         state.sort,
     ]);
 
+    const CARS_PER_PAGE = 6;
+
+    const totalPages = Math.ceil(
+        sortedCars.length / CARS_PER_PAGE
+    );
+
+    const startIndex =
+        (state.page - 1) * CARS_PER_PAGE;
+
+    const paginatedCars =
+        sortedCars.slice(
+            startIndex,
+            startIndex + CARS_PER_PAGE
+        );
+
     const resetFilters = () => {
         dispatch({
             type: ACTIONS.RESET,
@@ -91,39 +111,47 @@ const CarsSection = () => {
 
     useEffect(() => {
         const params = {};
-    
+
         if (debouncedSearch)
             params.search = debouncedSearch;
-    
+
         if (state.transmission !== "All")
             params.transmission = state.transmission;
-    
-        if (state.type !== "All")
-            params.type = state.type;
-    
+
+        if (state.types.length)
+            params.types = state.types.join(",");
+
         if (state.availableOnly)
             params.available = "true";
-    
+
         if (state.sort !== "default")
             params.sort = state.sort;
-    
+
         if (debouncedMinPrice)
             params.minPrice = debouncedMinPrice;
-    
+
         if (debouncedMaxPrice)
             params.maxPrice = debouncedMaxPrice;
-    
+
+        if (state.favoritesOnly)
+            params.favorites = "true";
+
+        if (state.page > 1)
+            params.page = state.page;
+
         setSearchParams(params);
-    
+
     }, [
         debouncedSearch,
         debouncedMinPrice,
         debouncedMaxPrice,
         state.transmission,
-        state.type,
+        state.types,
         state.availableOnly,
         state.sort,
         setSearchParams,
+        state.favoritesOnly,
+        state.page  
     ]);
 
     if (loading) {
@@ -166,10 +194,20 @@ const CarsSection = () => {
                     ) : (
                         <div className={styles.cars_section_container}>
                             {
-                                sortedCars?.map((car) => (
+                                paginatedCars?.map((car) => (
                                     <HomeCarCard key={car.id} car={car} />
                                 ))
                             }
+                            <Pagination
+                                currentPage={state.page}
+                                totalPages={totalPages}
+                                onPageChange={(page) =>
+                                    dispatch({
+                                        type: ACTIONS.SET_PAGE,
+                                        payload: page,
+                                    })
+                                }
+                            />  
                         </div>
                     )
                 }
