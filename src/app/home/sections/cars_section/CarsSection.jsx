@@ -1,38 +1,35 @@
 import HomeCarCard from '../../../../components/cards/home_car_card/HomeCarCard'
 import HomeCarsFilter from '../../../../components/filters/home_cars_filter/HomeCarsFilter'
 import styles from './CarsSection.module.scss'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useReducer } from 'react'
 import { useSearchParams } from "react-router-dom";
 import useCars from "../../../../hooks/useCars"
 import useDebounce from "../../../../hooks/useDebounce";
+import { filterReducer, initialState, ACTIONS } from "../../../../reducers/filterReducer";
 
 
 const CarsSection = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const [search, setSearch] = useState(
-        searchParams.get("search") || ""
-    );
-    
-    const debouncedSearch = useDebounce(search, 300);
-    
-    const [transmission, setTransmission] = useState(
-        searchParams.get("transmission") || "All"
-    );
-    
-    const [type, setType] = useState(
-        searchParams.get("type") || "All"
-    );
-    
-    const [availableOnly, setAvailableOnly] = useState(
-        searchParams.get("available") === "true"
-    );
-    
-    const [sort, setSort] = useState(
-        searchParams.get("sort") || "default"
-    );
 
+    const [state, dispatch] = useReducer(filterReducer, {
+        ...initialState,
+
+        search: searchParams.get("search") || "",
+
+        transmission: searchParams.get("transmission") || "All",
+
+        type: searchParams.get("type") || "All",
+
+        availableOnly:
+            searchParams.get("available") === "true",
+
+        sort:
+            searchParams.get("sort") || "default",
+    });
+
+    const debouncedSearch = useDebounce(state.search, 300);
     const {
         cars,
         loading,
@@ -46,15 +43,15 @@ const CarsSection = () => {
             car.name.toLowerCase().includes(debouncedSearch.toLowerCase());
 
         const transmissionMatch =
-            transmission === "All" ||
-            car.transmission === transmission;
+            state.transmission === "All" ||
+            car.transmission === state.transmission;
 
         const typeMatch =
-            type === "All" ||
-            car.type === type;
+            state.type === "All" ||
+            car.type === state.type;
 
         const availableMatch =
-            !availableOnly ||
+            !state.availableOnly ||
             car.available;
 
         return (
@@ -67,53 +64,50 @@ const CarsSection = () => {
 
     const sortedCars = [...filteredCars].sort((a, b) => {
 
-        if (sort === "low-high")
+        if (state.sort === "low-high")
             return a.pricePerDay - b.pricePerDay;
 
-        if (sort === "high-low")
+        if (state.sort === "high-low")
             return b.pricePerDay - a.pricePerDay;
 
         return 0;
     });
 
     const resetFilters = () => {
-        setSearch("");
-        setDebouncedSearch("");
-        setTransmission("All");
-        setType("All");
-        setAvailableOnly(false);
-        setSort("default");
-    
+        dispatch({
+            type: ACTIONS.RESET,
+        });
+
         setSearchParams({});
     };
 
     useEffect(() => {
 
         const params = {};
-    
+
         if (debouncedSearch)
             params.search = debouncedSearch;
-    
-        if (transmission !== "All")
-            params.transmission = transmission;
-    
-        if (type !== "All")
-            params.type = type;
-    
-        if (availableOnly)
+
+        if (state.transmission !== "All")
+            params.transmission = state.transmission;
+
+        if (state.type !== "All")
+            params.type = state.type;
+
+        if (state.availableOnly)
             params.available = "true";
-    
-        if (sort !== "default")
-            params.sort = sort;
-    
+
+        if (state.sort !== "default")
+            params.sort = state.sort;
+
         setSearchParams(params);
-    
+
     }, [
         debouncedSearch,
-        transmission,
-        type,
-        availableOnly,
-        sort
+        state.transmission,
+        state.type,
+        state.availableOnly,
+        state.sort,
     ]);
 
     if (loading) {
@@ -127,7 +121,7 @@ const CarsSection = () => {
         return (
             <div className={styles.cars_section}>
                 <h2>{error}</h2>
-    
+
                 <button onClick={retry}>
                     Retry
                 </button>
@@ -135,21 +129,12 @@ const CarsSection = () => {
         );
     }
     return (
-        
+
         <>
             <div className={styles.cars_section}>
                 <HomeCarsFilter
-                    search={search}
-                    setSearch={setSearch}
-                    transmission={transmission}
-                    setTransmission={setTransmission}
-                    type={type}
-                    setType={setType}
-                    availableOnly={availableOnly}
-                    setAvailableOnly={setAvailableOnly}
-                    sort={sort}
-                    setSort={setSort}
-
+                    state={state}
+                    dispatch={dispatch}
                 />
                 <span>Showing {sortedCars.length} of {cars.length} cars</span>
 

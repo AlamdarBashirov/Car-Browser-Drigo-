@@ -1,45 +1,58 @@
 import styles from "./HomeCarsFilter.module.scss";
+import { ACTIONS } from "../../../reducers/filterReducer";
 
-const HomeCarsFilter = ({
-    search,
-    setSearch,
-    transmission,
-    setTransmission,
-    type,
-    setType,
-    availableOnly,
-    setAvailableOnly,
-    sort,
-    setSort
-}) => {
+const HomeCarsFilter = ({ state, dispatch }) => {
     return (
         <div className={styles.filters}>
             <input
                 className={styles.search_input}
                 type="text"
                 placeholder="Search by car name..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={state.search}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.SET_SEARCH,
+                        payload: e.target.value,
+                    })
+                }
             />
+
             <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value)}
+                value={state.sort}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.SET_SORT,
+                        payload: e.target.value,
+                    })
+                }
             >
                 <option value="default">Default</option>
-                <option value="low-high">Low to High</option>
+                <option value="low-high">Low → High</option>
                 <option value="high-low">High → Low</option>
             </select>
+
             <select
-                value={transmission}
-                onChange={(e) => setTransmission(e.target.value)}
+                value={state.transmission}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.SET_TRANSMISSION,
+                        payload: e.target.value,
+                    })
+                }
             >
                 <option value="All">All Transmissions</option>
                 <option value="Automatic">Automatic</option>
                 <option value="Manual">Manual</option>
             </select>
+
             <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
+                value={state.type}
+                onChange={(e) =>
+                    dispatch({
+                        type: ACTIONS.SET_TYPE,
+                        payload: e.target.value,
+                    })
+                }
             >
                 <option value="All">All Types</option>
                 <option value="Economy">Economy</option>
@@ -47,11 +60,17 @@ const HomeCarsFilter = ({
                 <option value="SUV">SUV</option>
                 <option value="Luxury">Luxury</option>
             </select>
+
             <label>
                 <input
                     type="checkbox"
-                    checked={availableOnly}
-                    onChange={(e) => setAvailableOnly(e.target.checked)}
+                    checked={state.availableOnly}
+                    onChange={(e) =>
+                        dispatch({
+                            type: ACTIONS.SET_AVAILABLE,
+                            payload: e.target.checked,
+                        })
+                    }
                 />
                 Available Only
             </label>
