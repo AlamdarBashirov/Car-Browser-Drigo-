@@ -29,31 +29,31 @@ export const getBookings = async (userId) => {
 
 }
 
-export const createBooking = async (userId, carId, startDate, endDate, driver) => {
+export const createBooking = async (bookingData) => {
     await delay(800)
     bookings = loadData("bookings", [...bookingsData]);
-    const newBooking = {
-        id: `b${bookings.length + 1}`,
-        userId: userId,
-        carId: carId,
-        startDate: startDate,
-        endDate: endDate,
-        driver: driver
-    }
-
-    const allBookingsOfCar = bookings.filter(booking => booking.carId === carId)
+    
+    const allBookingsOfCar = bookings.filter(booking => booking.carId === bookingData.carId)
     console.log("allbookings of car", allBookingsOfCar);
-
-
+    
+    
     const hasConflict = allBookingsOfCar.some(booking =>
-        hasOverlap(startDate, endDate, booking.startDate, booking.endDate)
+        hasOverlap(bookingData.startDate, bookingData.endDate, booking.startDate, booking.endDate)
     )
-
-
+    
+    
     if (hasConflict){
         throw new Error ("The selected dates are unavailable.")
     }
-
+    
+    const newBooking = {
+        id: `b${bookings.length + 1}`,
+        userId: bookingData.userId,
+        carId: bookingData.carId,
+        startDate: bookingData.startDate,
+        endDate: bookingData.endDate,
+        driver: bookingData.driver
+    }
     bookings.push(newBooking)
     saveData("bookings", bookings)
 
