@@ -12,26 +12,26 @@ if(!users){
     localStorage.setItem("users", JSON.stringify(users))
 }
 
-export const register = async (name, email, password) => {
+export const register = async (registerData) => {
     await delay(800)
-    const user = users.find(user => user.email === email)
+    const user = users.find(user => user.email === registerData.email)
     if (user) {
         throw new Error("this user already exists")
     }
     const newUser = {
         id: users.length + 1,
-        name: name,
-        email: email,
-        password: password
+        name: registerData.name,
+        email: registerData.email,
+        password: registerData.password
     }
     users.push(newUser)
     localStorage.setItem("users", JSON.stringify(users))
     return newUser
 }
 
-export const login = async (email, password) =>{
+export const login = async (loginData) =>{
     await delay(800)
-    const user = users.find(user => user.email === email)
+    const user = users.find(user => user.email === loginData.email)
     if (!user){
         throw new Error("this user does not exist, please register")
         // console.log(Error);
@@ -39,7 +39,7 @@ export const login = async (email, password) =>{
 
     const currentPassword = user.password
 
-    if(password !== currentPassword){
+    if(loginData.password !== currentPassword){
         throw new Error ("password is incorrect")
     }
 
