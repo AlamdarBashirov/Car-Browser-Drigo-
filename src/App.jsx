@@ -4,6 +4,8 @@ import viteLogo from './assets/vite.svg'
 import './App.css'
 import Router from './router/Router'
 
+import {register, login, logout, getCurrentUser} from './api/authApi'
+
 function App() {
 
   return (
