@@ -20,11 +20,12 @@ import { loadData, saveData } from '../utils/storage'
 
 let bookings = loadData("bookings", [...bookingsData])
 
-export const getBookings = async (user) => {
+export const getBookings = async (userId) => {
     await delay(800)
     const allBookings = loadData("bookings")
+    const bookingsOfUser = allBookings.filter(booking => booking.userId == userId)
     console.log(allBookings);
-    return allBookings
+    return bookingsOfUser
 
 }
 
@@ -57,4 +58,24 @@ export const createBooking = async (userId, carId, startDate, endDate, driver) =
     saveData("bookings", bookings)
 
     return newBooking
+}
+
+export const cancelBooking = async (id) => {
+
+    await delay(800)
+    bookings = loadData("bookings", [...bookingsData]);
+
+    const booking = bookings.find(booking => booking.id === id)
+    const currentBookingIndex = bookings.findIndex(booking => booking.id === id)
+    if (!booking){
+        throw new Error("booking not found")
+    }
+    if (currentBookingIndex !==-1){
+        bookings.splice(currentBookingIndex, 1)
+    }
+
+
+    saveData("bookings", bookings)
+
+    return booking
 }
