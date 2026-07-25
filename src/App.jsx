@@ -5,6 +5,7 @@ import './App.css'
 import Router from './router/Router'
 
 import {register, login, logout, getCurrentUser} from './api/authApi'
+import { getBookings, createBooking } from './api/bookingsApi'
 
 function App() {
 
