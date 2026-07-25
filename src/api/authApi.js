@@ -60,7 +60,5 @@ export const getCurrentUser = async () => {
     
     return currentUser
 }
-login("alamdar@gmail.com", "salam")
-getCurrentUser()
 
 export default {register, login, logout, getCurrentUser}
