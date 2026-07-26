@@ -15,6 +15,7 @@ export const carsSlice = createSlice({
     name:"cars",
     initialState:{
         cars:[],
+        totalCount: 0,
         selectedCar: null,
         loading: false,
         error:null,
@@ -27,7 +28,8 @@ export const carsSlice = createSlice({
     //get all cars
     .addCase(getCarsThunk.fulfilled, (state, action) => {
         state.loading = false
-        state.cars = action.payload
+        state.cars = action.payload.cars
+        state.totalCount = action.payload.totalCount
         state.error = null
     })
     .addCase(getCarsThunk.pending, (state) => {

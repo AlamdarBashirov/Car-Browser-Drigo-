@@ -1,28 +1,28 @@
 import styles from "./HomeCarsFilter.module.scss";
 import { ACTIONS } from "../../../reducers/filterReducer";
 
-const HomeCarsFilter = ({ state, dispatch }) => {
+const HomeCarsFilter = ({ query, setQuery }) => {
     return (
         <div className={styles.filters}>
             <input
                 className={styles.search_input}
                 type="text"
                 placeholder="Search by car name..."
-                value={state.search}
+                value={query.search}
                 onChange={(e) =>
-                    dispatch({
-                        type: ACTIONS.SET_SEARCH,
-                        payload: e.target.value,
+                    setQuery({
+                        ...query,
+                        search: e.target.value
                     })
                 }
             />
 
             <select
-                value={state.sort}
+                value={query.sort}
                 onChange={(e) =>
-                    dispatch({
-                        type: ACTIONS.SET_SORT,
-                        payload: e.target.value,
+                    setQuery({
+                        ...query,
+                        sort: e.target.value
                     })
                 }
             >
@@ -35,11 +35,11 @@ const HomeCarsFilter = ({ state, dispatch }) => {
                 type="number"
                 placeholder="Min Price"
                 className={`${styles.search_input} ${styles.price_filter}`}
-                value={state.priceMin}
+                value={query.priceMin}
                 onChange={(e) =>
-                    dispatch({
-                        type: ACTIONS.SET_PRICE_MIN,
-                        payload: e.target.value,
+                    setQuery({
+                        ...query,
+                        priceMin: e.target.value
                     })
                 }
             />
@@ -48,21 +48,21 @@ const HomeCarsFilter = ({ state, dispatch }) => {
                 type="number"
                 placeholder="Max Price"
                 className={`${styles.search_input} ${styles.price_filter}`}
-                value={state.priceMax}
+                value={query.priceMax}
                 onChange={(e) =>
-                    dispatch({
-                        type: ACTIONS.SET_PRICE_MAX,
-                        payload: e.target.value,
+                    setQuery({
+                        ...query,
+                        priceMax: e.target.value
                     })
                 }
             />
 
             <select
-                value={state.transmission}
+                value={query.transmission}
                 onChange={(e) =>
-                    dispatch({
-                        type: ACTIONS.SET_TRANSMISSION,
-                        payload: e.target.value,
+                    setQuery({
+                        ...query,
+                        transmission: e.target.value
                     })
                 }
             >
@@ -88,13 +88,17 @@ const HomeCarsFilter = ({ state, dispatch }) => {
                                 type="checkbox"
 
                                 checked={
-                                    state.types.includes(type)
+                                    query.types.includes(type)
                                 }
 
                                 onChange={() =>
-                                    dispatch({
-                                        type: ACTIONS.SET_TYPE,
-                                        payload: type,
+                                    query.types.includes(type) ? 
+                                    setQuery({
+                                        ...query,
+                                        types: query.types.filter(item => item !== type)
+                                    }) : setQuery({
+                                        ...query,
+                                        types: [...query.types, type]
                                     })
                                 }
                             />
@@ -110,11 +114,11 @@ const HomeCarsFilter = ({ state, dispatch }) => {
             <label>
                 <input
                     type="checkbox"
-                    checked={state.favoritesOnly}
+                    checked={query.favoritesOnly}
                     onChange={(e) =>
-                        dispatch({
-                            type: ACTIONS.SET_FAVORITES_ONLY,
-                            payload: e.target.checked,
+                        setQuery({
+                            ...query,
+                            favoritesOnly: e.target.checked
                         })
                     }
                 />
@@ -124,11 +128,11 @@ const HomeCarsFilter = ({ state, dispatch }) => {
             <label>
                 <input
                     type="checkbox"
-                    checked={state.availableOnly}
+                    checked={query.availableOnly}
                     onChange={(e) =>
-                        dispatch({
-                            type: ACTIONS.SET_AVAILABLE,
-                            payload: e.target.checked,
+                        setQuery({
+                            ...query,
+                            availableOnly: e.target.checked
                         })
                     }
                 />

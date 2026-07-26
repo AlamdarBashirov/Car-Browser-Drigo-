@@ -1,6 +1,6 @@
 @use '../../../../styles/variables' as*;
 
-.cars_section{
+.carsSection{
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -9,7 +9,7 @@
     justify-content: center;
     padding: 40px 0;
     background-color: #F2EEFF;
-    .cars_section_container{
+    .carsSectionContainer{
         width: $container-width;
         display: flex;
         align-items: center;

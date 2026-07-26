@@ -1,5 +1,6 @@
 import carsData from "../data/cars.json";
 import delay from '../utils/delay';
+import { loadData } from "../utils/storage";
 
 let cars = [...carsData]
 
@@ -11,7 +12,49 @@ export const getCars = async (query = {}) => {
     throw new Error("Failed to fetch cars");
   }
 
-  return cars;
+  let filteredCars = [...cars]
+
+  const favorites = loadData("favoriteCars")
+  console.log(favorites);
+
+
+  if (query.search !== "") {
+    filteredCars = filteredCars.filter(car => car.name.toLowerCase().includes(query.search.toLowerCase()))
+  }
+  if (query.transmission !== "All") {
+    filteredCars = filteredCars.filter(car => car.transmission === query.transmission)
+  }
+  if (query.types.length !== 0) {
+    filteredCars = filteredCars.filter(car => query.types.includes(car.type))
+  }
+  if (query.favoritesOnly !== false) {
+    filteredCars = filteredCars.filter(car => favorites.includes(car.id))
+  }
+  if (query.availableOnly !== false) {
+    filteredCars = filteredCars.filter(car => car.available === true)
+  }
+  if (query.sort !== "default") {
+    filteredCars = filteredCars.sort((a, b) => query.sort === "high-low" ? b.pricePerDay - a.pricePerDay : a.pricePerDay - b.pricePerDay)
+  }
+  if (query.priceMin !== "") {
+    filteredCars = filteredCars.filter(car => car.pricePerDay >= query.priceMin)
+  }
+  if (query.priceMax !== "") {
+    filteredCars = filteredCars.filter(car => car.pricePerDay <= query.priceMax)
+  }
+
+  const totalCount = filteredCars.length
+  const startIndex = (query.page - 1) * query.limit;
+
+  const paginatedCars = filteredCars.slice(
+    startIndex,
+    startIndex + query.limit
+  )
+
+  return {
+    cars: paginatedCars,
+    totalCount
+  };
 };
 
 
@@ -20,10 +63,10 @@ export const getCar = async (id) => {
   const car = cars.find(car => car.id == Number(id))
 
   if (!car) {
-    throw new Error ("Car not found")
+    throw new Error("Car not found")
   }
 
   return car;
 }
 
-export default {getCars, getCar}
+export default { getCars, getCar }
