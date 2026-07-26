@@ -25,3 +25,5 @@ export const getCar = async (id) => {
 
   return car;
 }
+
+export default {getCars, getCar}

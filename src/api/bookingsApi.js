@@ -79,3 +79,5 @@ export const cancelBooking = async (id) => {
 
     return booking
 }
+
+export default {getBookings, cancelBooking, createBooking}

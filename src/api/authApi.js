@@ -60,3 +60,5 @@ export const getCurrentUser = async () => {
     
     return currentUser
 }
+
+export default {register, login, logout, getCurrentUser}
