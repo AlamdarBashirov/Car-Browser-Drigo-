@@ -5,6 +5,7 @@
 
 import userData from '../data/users.json';
 import delay from '../utils/delay';
+import { loadData, saveData } from '../utils/storage';
 
 let users = JSON.parse(localStorage.getItem("users"))
 if(!users){
@@ -25,7 +26,8 @@ export const register = async (registerData) => {
         password: registerData.password
     }
     users.push(newUser)
-    localStorage.setItem("users", JSON.stringify(users))
+    saveData("users", users)
+    saveData("currentUser", newUser)
     return newUser
 }
 

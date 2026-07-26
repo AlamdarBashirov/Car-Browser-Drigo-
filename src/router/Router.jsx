@@ -7,6 +7,7 @@ import NotFound from '../app/notFound/notFound'
 import { FavoritesProvider } from "../context/FavoritesContext";
 import SignUpPage from '../app/auth/signup/SignUpPage'
 import SignInPage from '../app/auth/signin/SignInPage'
+import ProtectedRoute from '../components/protectedRoute/ProtectedRoute'
 
 const Router = () => {
     return (
@@ -14,8 +15,10 @@ const Router = () => {
             <FavoritesProvider>
                 <Routes>
                     <Route element={<Layout />}>
+                        <Route element={<ProtectedRoute />}>
+                            <Route path="/signup" element={<SignUpPage />} />
+                        </Route>
                         <Route path="/" element={<Home />} />
-                        <Route path="/signup" element={<SignUpPage />} />
                         <Route path="/signin" element={<SignInPage />} />
                         <Route path="/cars/:id" element={<CarDetail />} />
                         <Route path="*" element={<NotFound />} />

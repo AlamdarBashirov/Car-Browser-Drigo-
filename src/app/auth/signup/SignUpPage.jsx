@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './SignUpPage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -21,9 +21,11 @@ const SignUpPage = () => {
         dispatch(registerThunk(registerData))
     }
 
-    // if (currentUser){
-    //     navigate("/")
-    // }
+    useEffect(() => {
+        if (currentUser) {
+            navigate("/")
+        }
+    }, [currentUser])
 
     return (
         <>

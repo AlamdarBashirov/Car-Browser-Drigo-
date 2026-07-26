@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './SignInPage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,9 +20,12 @@ const SignInPage = () => {
         dispatch(loginThunk(loginData))
     }
 
-    if (currentUser){
-        navigate("/")
-    }
+    useEffect(() => {
+        if (currentUser){
+            navigate("/")
+        }
+    }, [currentUser, navigate])
+
 
     return (
         <>
