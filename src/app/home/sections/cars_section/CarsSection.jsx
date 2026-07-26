@@ -226,25 +226,29 @@ import { getCarsThunk } from '../../../../redux/reducers/carsSlice'
 import HomeCarCard from '../../../../components/cards/home_car_card/HomeCarCard'
 import HomeCarsFilter from '../../../../components/filters/home_cars_filter/HomeCarsFilter'
 import Pagination from '../../../../components/pagination/Pagination'
+import { useSearchParams } from 'react-router-dom'
 
 const CarsSection = () => {
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const params = {}
     const dispatch = useDispatch()
 
     const { cars, loading, error, totalCount } = useSelector((state) => state.cars)
 
-    const [query, setQuery] = useState({
-        search: "",
-        transmission: "All",
-        types: [],
-        favoritesOnly: false,
-        availableOnly: false,
-        sort: "default",
-        priceMin: "",
-        priceMax: "",
-        page: 1,
-        limit: 6
-        // seats: null
+    const [query,setQuery] = useState({
+        search: searchParams.get("search") || "",
+        transmission: searchParams.get("transmission") || "All",
+        types: searchParams.get("types") 
+            ? searchParams.get("types").split(",")
+            : [],
+        favoritesOnly: searchParams.get("favorites") === "true",
+        availableOnly: searchParams.get("available") === "true",
+        sort: searchParams.get("sort") || "default",
+        priceMin: searchParams.get("priceMin") || "",
+        priceMax: searchParams.get("priceMax") || "",
+        page: Number(searchParams.get("page")) || 1,
+        limit:4
     })
 
     const totalPages = Math.ceil(
@@ -254,6 +258,39 @@ const CarsSection = () => {
     useEffect(() => {
         dispatch(getCarsThunk(query))
     }, [query])
+
+    useEffect(() => {
+        if(query.search){
+            params.search = query.search
+        }
+        if(query.transmission !== "All"){
+            params.transmission = query.transmission
+        }
+        if(query.sort !== "default"){
+            params.sort = query.sort
+        }
+        if(query.page !== 1){
+            params.page = query.page
+        }
+        if(query.availableOnly !== false){
+            params.availableOnly = query.availableOnly
+        }
+        if(query.favoritesOnly !== false){
+            params.favoritesOnly = query.favoritesOnly
+        }
+        if(query.priceMin){
+            params.priceMin = query.priceMin
+        }
+        if(query.priceMax){
+            params.priceMax = query.priceMax
+        }
+        if(query.types.length !== 0){
+            // params.types = String(query.types)
+            params.types = query.types.join(",")
+        }
+        setSearchParams(params)
+    }, [query])
+    
     return (
         <>
             <div className={styles.carsSection}>
@@ -262,6 +299,7 @@ const CarsSection = () => {
                         query={query}
                         setQuery={setQuery}
                     />
+                    {/* <span>Showing {cars.length} of {totalCount} cars</span> */}
                 </div>
                 <div className={styles.carsSectionContainer}>
                     {cars && cars.map((car) => {
