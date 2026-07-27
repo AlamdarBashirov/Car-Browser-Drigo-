@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import styles from './BookingPage.module.scss'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCarByIdThunk } from '../../redux/reducers/carsSlice'
+import { createBookingThunk } from '../../redux/reducers/bookingSlice'
 
 const BookingPage = () => {
 
-    const {id} = useParams()
+    const { id } = useParams()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const { selectedCar, loading, error } = useSelector((state) => state.cars)
 
     const [validationError, setValidationError] = useState("")
+    const [success, setSuccess] = useState("")
     const [bookingData, setBookingData] = useState({
         startDate: "",
         endDate: "",
-        name: "",
-        email: ""
+        driver:{
+            name: "",
+            email: ""
+        },
+        carId: id,
     })
 
     const [step, setStep] = useState(1)
@@ -25,6 +36,9 @@ const BookingPage = () => {
     const minRentDay = 2
     const rentDay = (end - start) / (1000 * 60 * 60 * 24)
 
+    const serviceFee = 20
+
+    const totalPrice = selectedCar ? rentDay * selectedCar.pricePerDay + serviceFee : 0;
     const handleContinue = () => {
         setValidationError("")
         //for step one
@@ -46,21 +60,41 @@ const BookingPage = () => {
     const handleDriverContinue = () => {
         setValidationError("")
         //for step two
-        if(!bookingData.name){
+        if (!bookingData.driver.name) {
             setValidationError("The name cannot be empty.")
             return;
         }
-        if(!bookingData.email){
+        if (!bookingData.driver.email) {
             setValidationError("The email cannot be empty.")
             return;
         }
-        if(!bookingData.email.includes("@") || !bookingData.email.includes(".")){
+        if (!bookingData.driver.email.includes("@") || !bookingData.driver.email.includes(".")) {
             setValidationError("The email is not in the correct format.")
             return;
         }
 
         setStep(step + 1)
     }
+
+    const navigateHome = () => {
+        navigate("/")
+    }
+    const confirmBooking = async() => {
+        try {
+            await dispatch(createBookingThunk(bookingData)).unwrap();
+            setSuccess("Booking created successfully");
+        
+            setTimeout(() => {
+                navigate("/");
+            }, 1000);
+        } catch (err) {
+            setValidationError(err.message);
+        }
+    }
+
+    useEffect(() => {
+        dispatch(getCarByIdThunk(id))
+    }, [id])
 
     return (
         <div>
@@ -112,10 +146,13 @@ const BookingPage = () => {
                                 <input
                                     type="text"
                                     id='driverName'
-                                    value={bookingData.name}
+                                    value={bookingData.driver.name}
                                     onChange={(e) => setBookingData({
                                         ...bookingData,
-                                        name: e.target.value
+                                        driver: {
+                                            ...bookingData.driver,
+                                            name: e.target.value,
+                                        },
                                     })}
                                 />
                             </div>
@@ -124,22 +161,55 @@ const BookingPage = () => {
                                 <input
                                     type="email"
                                     id='driverEmail'
-                                    value={bookingData.email}
+                                    value={bookingData.driver.email}
                                     onChange={(e) => setBookingData({
                                         ...bookingData,
-                                        email: e.target.value
+                                        driver: {
+                                            ...bookingData.driver,
+                                            email: e.target.value,
+                                        },
                                     })}
                                 />
                             </div>
 
                             <button
-                                disabled={!bookingData.name || !bookingData.email}
+                                disabled={!bookingData.driver.name || !bookingData.driver.email}
                                 onClick={handleDriverContinue}
                             >
                                 Continue
                             </button>
 
                             {validationError && <span>{validationError}</span>}
+                        </div>
+                    )
+                }
+                {
+                    step === 3 && (
+                        <div>
+                            <div>
+                                <h2>Booking Details</h2>
+                                <div>
+                                    <p>Car name: {selectedCar?.name}</p>
+                                    <p>Transmission: {selectedCar?.transmission}</p>
+                                    <p>Type: {selectedCar?.type}</p>
+                                    <p>Seats: {selectedCar?.seats}</p>
+                                    <p>Price per day: {selectedCar?.pricePerDay}</p>
+                                    <p>Driver name: {bookingData?.driver.name}</p>
+                                    <p>Driver email: {bookingData?.driver.email}</p>
+                                    <p>Start date: {bookingData.startDate}</p>
+                                    <p>End date: {bookingData.endDate}</p>
+                                    <p>Rental dates: {rentDay}</p>
+                                    <p>Service Fee: {serviceFee} $</p>
+                                    <p>Total Price: {totalPrice}</p>
+                                </div>
+                                <button
+                                    onClick={confirmBooking}
+                                >
+                                    Confirm Booking
+                                </button>
+                                {success && <span>{success}</span>}
+                                {validationError && <span>{validationError}</span>}
+                            </div>
                         </div>
                     )
                 }
