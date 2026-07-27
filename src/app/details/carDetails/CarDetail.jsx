@@ -1,40 +1,40 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import styles from './CarDetail.module.scss'
 import cars from "../../../data/cars.json";
 import useCars from "../../../hooks/useCars";
 import { useFavoritesContext } from "../../../context/FavoritesContext";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getCarByIdThunk } from "../../../redux/reducers/carsSlice";
 
 const CarDetail = () => {
     const { id } = useParams();
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    const {
-        cars,
-        loading,
-        error,
-        retry,
-    } = useCars();
+    const {selectedCar, loading, error} = useSelector((state) => state.cars)
+
+    const retry = () => {
+        dispatch(getCarByIdThunk(id))
+    }
 
     const {
         toggleFavorite,
         isFavorite,
     } = useFavoritesContext();
 
-    const car = cars.find((item) => item.id === Number(id));
+    useEffect(() => {
+        dispatch(getCarByIdThunk(id))
+    }, [id])
 
-    if (!car) {
-        return (
-            <>
-                <h1>Car not found.</h1>
-                <Link to="/">Go Home</Link>
-            </>
-        );
-    }
+    
 
+    
     if (loading) {
         return <h2>Loading...</h2>;
     }
-
+    
     if (error) {
         return (
             <>
@@ -43,6 +43,14 @@ const CarDetail = () => {
                 <button onClick={retry}>
                     Retry
                 </button>
+            </>
+        );
+    }
+    if (!selectedCar) {
+        return (
+            <>
+                <h1>Car not found.</h1>
+                <Link to="/">Go Home</Link>
             </>
         );
     }
@@ -63,10 +71,10 @@ const CarDetail = () => {
     
                     <button
                         className={styles.favorite_btn}
-                        onClick={() => toggleFavorite(car.id)}
+                        onClick={() => toggleFavorite(selectedCar.id)}
                     >
                         {
-                            isFavorite(car.id)
+                            isFavorite(selectedCar.id)
                                 ? <FaHeart />
                                 : <FaRegHeart />
                         }
@@ -74,28 +82,28 @@ const CarDetail = () => {
     
                 </div>
     
-                <h1>{car.name}</h1>
+                <h1>{selectedCar.name}</h1>
     
                 <div className={styles.details}>
     
                     <div>
                         <span>Type</span>
-                        <p>{car.type}</p>
+                        <p>{selectedCar.type}</p>
                     </div>
     
                     <div>
                         <span>Transmission</span>
-                        <p>{car.transmission}</p>
+                        <p>{selectedCar.transmission}</p>
                     </div>
     
                     <div>
                         <span>Seats</span>
-                        <p>{car.seats}</p>
+                        <p>{selectedCar.seats}</p>
                     </div>
     
                     <div>
                         <span>Price / Day</span>
-                        <p>${car.pricePerDay}</p>
+                        <p>${selectedCar.pricePerDay}</p>
                     </div>
     
                     <div>
@@ -103,18 +111,23 @@ const CarDetail = () => {
     
                         <p
                             className={
-                                car.available
+                                selectedCar.available
                                     ? styles.available
                                     : styles.unavailable
                             }
                         >
                             {
-                                car.available
+                                selectedCar.available
                                     ? "Available"
                                     : "Unavailable"
                             }
                         </p>
     
+                    </div>
+
+                    <div>
+                        <span>Book this car</span>
+                        <button className={styles.bookNowBtn} onClick={() => navigate(`/booking/${selectedCar.id}`)} > Book Now</button>
                     </div>
     
                 </div>

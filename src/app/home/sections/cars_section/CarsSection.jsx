@@ -226,7 +226,7 @@ import { getCarsThunk } from '../../../../redux/reducers/carsSlice'
 import HomeCarCard from '../../../../components/cards/home_car_card/HomeCarCard'
 import HomeCarsFilter from '../../../../components/filters/home_cars_filter/HomeCarsFilter'
 import Pagination from '../../../../components/pagination/Pagination'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const CarsSection = () => {
 
