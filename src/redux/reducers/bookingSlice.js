@@ -29,7 +29,27 @@ export const bookingSlice = createSlice({
         loading: false,
         error: null
     },
-    reducers: {},
+    reducers: {
+        cancelBookingOptimistic: (state, action) => {
+            const booking = state.bookings.find((item) => item.id === action.payload)
+            if (booking) {
+                booking.status = "cancelled"
+            }
+            if (state.selectedBooking?.id === action.payload){
+                state.selectedBooking.status = "cancelled"
+            }
+        },
+        rollbackCancelledBooking: (state, action) => {
+            const booking = state.bookings.find(item => item.id === action.payload);
+        
+            if (booking) {
+                booking.status = "active";
+            }
+            if (state.selectedBooking?.id === action.payload){
+                state.selectedBooking.status = "active"
+            }
+        }
+    },
 
     extraReducers: builder =>
         builder
@@ -70,6 +90,7 @@ export const bookingSlice = createSlice({
                 state.loading = false
                 state.selectedBooking = action.payload
                 state.error = null
+                state.bookings  .push(action.payload);
             })
             .addCase(createBookingThunk.pending, (state) => {
                 state.loading = true
@@ -94,8 +115,8 @@ export const bookingSlice = createSlice({
             .addCase(cancelBookingThunk.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.error.message
-                state.selectedBooking = null
             })
 })
 
+export const {cancelBookingOptimistic, rollbackCancelledBooking} = bookingSlice.actions;
 export default bookingSlice.reducer

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import styles from './BookingDetail.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { cancelBookingThunk, getBookingByIdThunk } from '../../../redux/reducers/bookingSlice'
+import { cancelBookingOptimistic, cancelBookingThunk, getBookingByIdThunk, rollbackCancelledBooking } from '../../../redux/reducers/bookingSlice'
 import { getCarByIdThunk } from '../../../redux/reducers/carsSlice'
 
 const BookingDetail = () => {
@@ -10,7 +10,7 @@ const BookingDetail = () => {
     const dispatch = useDispatch()
     const { id } = useParams()
     const { selectedCar } = useSelector((state) => state.cars)
-    const { selectedBooking } = useSelector((state) => state.bookings)
+    const { selectedBooking ,loading, error} = useSelector((state) => state.bookings)
 
     useEffect(() => {
         dispatch(getBookingByIdThunk(id))
@@ -21,9 +21,15 @@ const BookingDetail = () => {
         }
     }, [selectedBooking])
 
-    const cancelBooking = () => {
+    const cancelBooking = async () => {
+
         if (selectedBooking) {
-            dispatch(cancelBookingThunk(selectedBooking.id))
+            dispatch(cancelBookingOptimistic(selectedBooking.id))
+            try {
+                await dispatch(cancelBookingThunk(selectedBooking.id)).unwrap()
+            } catch (error) {
+                dispatch(rollbackCancelledBooking(selectedBooking.id))
+            }
         }
         return selectedBooking
     }
@@ -51,9 +57,11 @@ const BookingDetail = () => {
             </div>
             <button
                 onClick={cancelBooking}
+                disabled={selectedBooking?.status === "cancelled"}
             >
                 Cancel Booking
             </button>
+            {error && <span>{error}</span>}
         </>
     )
 }

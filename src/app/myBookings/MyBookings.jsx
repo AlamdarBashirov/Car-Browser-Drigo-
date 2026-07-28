@@ -21,13 +21,9 @@ const MyBookings = () => {
     }, [currentUser]);
 
     useEffect(() => {
-        console.log("getCarsThunk dispatch");
         dispatch(getCarsThunk({page: 1,
             limit: 9999}));
-    }, []);
-
-    console.log(cars);
-    console.log(totalCount);
+    }, [bookings]);
     
   return (
     <div>
