@@ -38,9 +38,8 @@ export const createBooking = async (bookingData) => {
     await delay(800)
     bookings = loadData("bookings", [...bookingsData]);
     
-    const allBookingsOfCar = bookings.filter(booking => booking.carId === bookingData.carId)
+    const allBookingsOfCar = bookings.filter(booking => booking.carId === bookingData.carId && booking.status !== "cancelled")
     console.log("allbookings of car", allBookingsOfCar);
-    
     
     const hasConflict = allBookingsOfCar.some(booking =>
         hasOverlap(bookingData.startDate, bookingData.endDate, booking.startDate, booking.endDate)
@@ -60,7 +59,7 @@ export const createBooking = async (bookingData) => {
     return newBooking
 }
 
-    export const cancelBooking = async (id) => {
+export const cancelBooking = async (id) => {
 
         await delay(500)
 
