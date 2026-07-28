@@ -18,12 +18,12 @@ const Router = () => {
             <FavoritesProvider>
                 <Routes>
                     <Route element={<Layout />}>
-                        {/* <Route element={<ProtectedRoute />}> */}
+                        <Route element={<ProtectedRoute />}>
+                            <Route path="/my-bookings" element={<MyBookings />} />
+                        </Route>
                             <Route path="/signup" element={<SignUpPage />} />
-                        {/* </Route> */}
                         <Route path="/" element={<Home />} />
                         <Route path="/signin" element={<SignInPage />} />
-                        <Route path="/my-bookings" element={<MyBookings />} />
                         <Route path="/cars/:id" element={<CarDetail />} />
                         <Route path="/booking/:id" element={<BookingPage />} />
                         <Route path="/booking-detail/:id" element={<BookingDetail />} />

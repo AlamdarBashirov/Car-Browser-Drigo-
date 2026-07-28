@@ -6,13 +6,18 @@ const ProtectedRoute = ({ children }) => {
 
     const navigate = useNavigate()
 
-    const { currentUser } = useSelector((state) => state.auth)
-
+    const { currentUser, initialized} = useSelector((state) => state.auth)
+    console.log("protected", currentUser);
+    
     useEffect(() => {
-        if (!currentUser) {
-            navigate("/signin")
+        if (initialized && !currentUser) {
+            navigate("/signin");
         }
-    }, [currentUser, navigate])
+    }, [initialized, currentUser, navigate]);
+    
+    if (!initialized) {
+        return <h1>Loading...</h1>;
+    }
     return (
         <div>{children}</div>
     )

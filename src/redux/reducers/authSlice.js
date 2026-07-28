@@ -26,7 +26,8 @@ export const authSlice = createSlice({
     initialState:{
         currentUser: null,
         loading: false,
-        error: null
+        error: null,
+        initialized: false
     },
     reducers:{},
     extraReducers: builder => 
@@ -80,6 +81,7 @@ export const authSlice = createSlice({
     //get current user
     .addCase(getCurrentUserThunk.fulfilled, (state, action) => {
         state.currentUser = action.payload
+        state.initialized = true
         state.loading = false
         state.error = null
     })
