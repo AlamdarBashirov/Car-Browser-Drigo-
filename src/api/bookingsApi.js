@@ -26,7 +26,6 @@ export const getBookings = async (userId) => {
     const bookingsOfUser = allBookings.filter(booking => booking.userId == userId)
     console.log(allBookings);
     return bookingsOfUser
-
 }
 
 export const getBookingById = async (bookingId) => {
@@ -47,7 +46,6 @@ export const createBooking = async (bookingData) => {
         hasOverlap(bookingData.startDate, bookingData.endDate, booking.startDate, booking.endDate)
     )
     
-    
     if (hasConflict){
         throw new Error ("The selected dates are unavailable.")
     }
@@ -66,7 +64,7 @@ export const createBooking = async (bookingData) => {
 
         await delay(500)
 
-        if (Math.random() < 0.1) {
+        if (Math.random() < 0.99) {
             throw new Error("Failed to cancel booking");
         }
 

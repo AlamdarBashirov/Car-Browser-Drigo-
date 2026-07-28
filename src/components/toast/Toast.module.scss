@@ -1,0 +1,23 @@
+.toast{
+    position: absolute;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    width: 100%;
+    height: fit-content;
+    .toastContainer{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        max-width: 300px;
+        &.success{
+            background-color: greenyellow;
+        }
+        &.error{
+            background-color: red;
+        }
+    }
+}

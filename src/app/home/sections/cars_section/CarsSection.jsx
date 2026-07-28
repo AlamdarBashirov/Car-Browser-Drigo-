@@ -227,6 +227,7 @@ import HomeCarCard from '../../../../components/cards/home_car_card/HomeCarCard'
 import HomeCarsFilter from '../../../../components/filters/home_cars_filter/HomeCarsFilter'
 import Pagination from '../../../../components/pagination/Pagination'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { showToast } from '../../../../redux/reducers/toastSlice'
 
 const CarsSection = () => {
 
@@ -291,6 +292,15 @@ const CarsSection = () => {
         setSearchParams(params)
     }, [query])
     
+    if (loading) {
+        return <h1>Loading ...</h1>
+    }
+    if (error) {
+        dispatch(showToast({
+            message: error,
+            type:error
+        }))
+    }
     return (
         <>
             <div className={styles.carsSection}>

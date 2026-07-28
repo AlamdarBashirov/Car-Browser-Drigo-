@@ -4,7 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getCarByIdThunk } from "../../redux/reducers/carsSlice";
 import { createBookingThunk } from "../../redux/reducers/bookingSlice";
-import { getCurrentUserThunk } from "../../redux/reducers/AuthSlice";
+import { getCurrentUserThunk } from "../../redux/reducers/authSlice";
+import { showToast } from "../../redux/reducers/toastSlice";
 
 const BookingPage = () => {
     const { id } = useParams();
@@ -42,9 +43,7 @@ const BookingPage = () => {
 
     const serviceFee = 20;
 
-    const totalPrice = selectedCar
-        ? rentDay * selectedCar.pricePerDay + serviceFee
-        : 0;
+    const totalPrice = selectedCar ? rentDay * selectedCar.pricePerDay + serviceFee : 0;
 
     const handleContinue = () => {
         setValidationError("");
@@ -111,11 +110,19 @@ const BookingPage = () => {
 
             setSuccess("Booking created successfully");
 
+            dispatch(showToast({
+                message: success,
+                type: "success"
+            }))
             setTimeout(() => {
-                navigate("/");
-            }, 1000);
+                navigate("/my-bookings");
+            }, 2000);
         } catch (err) {
             setValidationError(err.message);
+            dispatch(showToast({
+                message: validationError,
+                type: "error"
+            }))
         }
     };
 
@@ -250,8 +257,7 @@ const BookingPage = () => {
                         Confirm Booking
                     </button>
 
-                    {success && <span>{success}</span>}
-                    {validationError && <span>{validationError}</span>}
+                    
                 </div>
             )}
         </div>

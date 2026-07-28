@@ -2,7 +2,8 @@ import { useEffect } from 'react'
 import './App.css'
 import Router from './router/Router'
 import { useDispatch } from 'react-redux'
-import { getCurrentUserThunk } from './redux/reducers/AuthSlice'
+import Toast from './components/toast/Toast'
+import { getCurrentUserThunk } from './redux/reducers/authSlice'
 
 function App() {
   const dispatch = useDispatch()
@@ -13,6 +14,7 @@ function App() {
   return (
     <>
       <Router />
+      <Toast/>
     </>
   )
 }
