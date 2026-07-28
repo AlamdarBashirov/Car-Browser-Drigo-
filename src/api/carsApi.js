@@ -6,6 +6,19 @@ let cars = [...carsData]
 
 export const getCars = async (query = {}) => {
   await delay(800)
+  query = {
+    search: "",
+    transmission: "All",
+    types: [],
+    favoritesOnly: false,
+    availableOnly: false,
+    sort: "default",
+    priceMin: "",
+    priceMax: "",
+    page: 1,
+    limit: cars.length,
+    ...query,
+  };
   const shouldFail = Math.random() < 0.2;
 
   if (shouldFail) {
@@ -14,9 +27,7 @@ export const getCars = async (query = {}) => {
 
   let filteredCars = [...cars]
 
-  const favorites = loadData("favoriteCars")
-  console.log(favorites);
-
+  const favorites = loadData("favoriteCars") || []
 
   if (query.search !== "") {
     filteredCars = filteredCars.filter(car => car.name.toLowerCase().includes(query.search.toLowerCase()))
@@ -24,7 +35,7 @@ export const getCars = async (query = {}) => {
   if (query.transmission !== "All") {
     filteredCars = filteredCars.filter(car => car.transmission === query.transmission)
   }
-  if (query.types.length !== 0) {
+  if (query.types?.length !== 0) {
     filteredCars = filteredCars.filter(car => query.types.includes(car.type))
   }
   if (query.favoritesOnly !== false) {
@@ -44,12 +55,15 @@ export const getCars = async (query = {}) => {
   }
 
   const totalCount = filteredCars.length
-  const startIndex = (query.page - 1) * query.limit;
+  const page = query.page ?? 1;
+  const limit = query.limit ?? filteredCars.length;
+
+  const startIndex = (page - 1) * limit;
 
   const paginatedCars = filteredCars.slice(
     startIndex,
-    startIndex + query.limit
-  )
+    startIndex + limit
+  );
 
   return {
     cars: paginatedCars,
@@ -60,7 +74,7 @@ export const getCars = async (query = {}) => {
 
 export const getCar = async (id) => {
   await delay(800)
-  const car = cars.find(car => car.id == Number(id))
+  const car = cars.find(car => car.id == id)
 
   if (!car) {
     throw new Error("Car not found")

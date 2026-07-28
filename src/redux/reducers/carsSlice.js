@@ -39,6 +39,7 @@ export const carsSlice = createSlice({
     .addCase(getCarsThunk.rejected, (state, action) => {
         state.error = action.error.message
         state.loading = false
+
     }) 
 
     //get car by id

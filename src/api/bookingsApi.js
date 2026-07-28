@@ -29,6 +29,12 @@ export const getBookings = async (userId) => {
 
 }
 
+export const getBookingById = async (bookingId) => {
+    await delay(800)
+    const booking = bookings.find(item => item.id == bookingId)
+    return booking
+}
+
 export const createBooking = async (bookingData) => {
     await delay(800)
     bookings = loadData("bookings", [...bookingsData]);
@@ -48,11 +54,7 @@ export const createBooking = async (bookingData) => {
     
     const newBooking = {
         id: `b${bookings.length + 1}`,
-        userId: bookingData.userId,
-        carId: bookingData.carId,
-        startDate: bookingData.startDate,
-        endDate: bookingData.endDate,
-        driver: bookingData.driver
+        ...bookingData
     }
     bookings.push(newBooking)
     saveData("bookings", bookings)
@@ -60,24 +62,26 @@ export const createBooking = async (bookingData) => {
     return newBooking
 }
 
-export const cancelBooking = async (id) => {
+    export const cancelBooking = async (id) => {
 
-    await delay(800)
-    bookings = loadData("bookings", [...bookingsData]);
+        await delay(800)
+        bookings = loadData("bookings", [...bookingsData]);
 
-    const booking = bookings.find(booking => booking.id === id)
-    const currentBookingIndex = bookings.findIndex(booking => booking.id === id)
-    if (!booking){
-        throw new Error("booking not found")
+        const booking = bookings.find(booking => booking.id === id)
+
+        if (!booking) {
+            throw new Error("Booking not found");
+        }
+    
+        if (booking.status === "cancelled") {
+            throw new Error("Booking is already cancelled");
+        }
+
+        booking.status = "cancelled"
+
+        saveData("bookings", bookings)
+
+        return booking
     }
-    if (currentBookingIndex !==-1){
-        bookings.splice(currentBookingIndex, 1)
-    }
 
-
-    saveData("bookings", bookings)
-
-    return booking
-}
-
-export default {getBookings, cancelBooking, createBooking}
+export default {getBookings, cancelBooking, createBooking, getBookingById}

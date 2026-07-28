@@ -9,6 +9,8 @@ import SignUpPage from '../app/auth/signup/SignUpPage'
 import SignInPage from '../app/auth/signin/SignInPage'
 import ProtectedRoute from '../components/protectedRoute/ProtectedRoute'
 import BookingPage from '../app/booking/BookingPage'
+import MyBookings from '../app/myBookings/MyBookings'
+import BookingDetail from '../app/details/bookingDetails/BookingDetail'
 
 const Router = () => {
     return (
@@ -16,13 +18,15 @@ const Router = () => {
             <FavoritesProvider>
                 <Routes>
                     <Route element={<Layout />}>
-                        <Route element={<ProtectedRoute />}>
+                        {/* <Route element={<ProtectedRoute />}> */}
                             <Route path="/signup" element={<SignUpPage />} />
-                        </Route>
+                        {/* </Route> */}
                         <Route path="/" element={<Home />} />
                         <Route path="/signin" element={<SignInPage />} />
+                        <Route path="/my-bookings" element={<MyBookings />} />
                         <Route path="/cars/:id" element={<CarDetail />} />
                         <Route path="/booking/:id" element={<BookingPage />} />
+                        <Route path="/booking-detail/:id" element={<BookingDetail />} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>
