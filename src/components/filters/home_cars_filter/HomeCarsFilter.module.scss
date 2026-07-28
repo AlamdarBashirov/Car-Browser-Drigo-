@@ -6,11 +6,12 @@
     flex-wrap: wrap;
     width: $container-width;
     gap: 20px;
+    width: 100%;
     .search_input{
         border: 2px solid $card-border-color;
         outline: none;
         padding: 6px 10px;
-        width: 400px;
+        max-width: 290px;
     }
     select{
         padding: 5px 10px;

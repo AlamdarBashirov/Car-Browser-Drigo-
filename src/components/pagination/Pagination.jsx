@@ -13,42 +13,40 @@ const Pagination = ({ currentPage, totalPages, onPageChange, }) => {
     return (
         <div className={styles.pagination}>
 
-            <div>
-                <button
-                    disabled={currentPage === 1}
-                    onClick={() =>
-                        onPageChange(currentPage - 1)
-                    }
-                >
-                    Previous
-                </button>
+            <button
+                className={styles.pageButton}
+                disabled={currentPage === 1}
+                onClick={() => onPageChange(currentPage - 1)}
+            >
+                ← Previous
+            </button>
 
-                <span>
-                    {currentPage} / {totalPages}
-                </span>
-
-
-
-                <button
-                    disabled={currentPage === totalPages}
-                    onClick={() =>
-                        onPageChange(currentPage + 1)
-                    }
-                >
-                    Next
-                </button>
-            </div>
-
-            <div>
-                {pages.map(page => (
+            <div className={styles.pageNumbers}>
+                {pages.map((page) => (
                     <button
                         key={page}
                         onClick={() => onPageChange(page)}
+                        className={`${styles.pageNumber} ${currentPage === page ? styles.activePage : ""
+                            }`}
                     >
                         {page}
                     </button>
                 ))}
             </div>
+
+            <div className={styles.pageInfo}>
+                <span>
+                    Page {currentPage} of {totalPages}
+                </span>
+            </div>
+
+            <button
+                className={styles.pageButton}
+                disabled={currentPage === totalPages}
+                onClick={() => onPageChange(currentPage + 1)}
+            >
+                Next →
+            </button>
 
         </div>
     );

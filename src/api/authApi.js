@@ -15,6 +15,9 @@ if(!users){
 
 export const register = async (registerData) => {
     await delay(800)
+    if (Math.random() < 0.1) {
+        throw new Error("Failed to sign up, please try again");
+    }
     const user = users.find(user => user.email === registerData.email)
     if (user) {
         throw new Error("this user already exists")
@@ -33,6 +36,9 @@ export const register = async (registerData) => {
 
 export const login = async (loginData) =>{
     await delay(800)
+    if (Math.random() < 0.1) {
+        throw new Error("Failed to sign in, please try again");
+    }
     const user = users.find(user => user.email === loginData.email)
     if (!user){
         throw new Error("this user does not exist, please register")
@@ -52,11 +58,17 @@ export const login = async (loginData) =>{
 
 export const logout = async () => {
     await delay (500)
+    if (Math.random() < 0.1) {
+        throw new Error("Failed to logging out");
+    }
     localStorage.removeItem("currentUser")
 }
 
 export const getCurrentUser = async () => {
     await delay(500)
+    if (Math.random() < 0.1) {
+        throw new Error("Failed to get user info");
+    }
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
     console.log(currentUser);
     

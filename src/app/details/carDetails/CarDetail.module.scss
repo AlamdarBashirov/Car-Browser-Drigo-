@@ -1,5 +1,6 @@
+@use '../../../styles/variables' as*;
 .detail_page {
-    min-height: calc(100vh - 80px);
+    min-height: 100vh;
 
     display: flex;
     justify-content: center;
@@ -78,6 +79,16 @@
 
             gap: 20px;
 
+            .bookNowBtn{
+                background-color: $card-border-color;
+                border: none;
+                border-radius: 10px;
+                padding: 10px 20px;
+                color: white;
+                &:hover{
+                    background-color: blue;
+                }
+            }
             div {
                 padding: 18px;
 
@@ -110,6 +121,17 @@
                 .unavailable {
                     color: #d32f2f;
                 }
+            }
+        }
+    }
+}
+
+@media screen and (max-width:430px) {
+    .detail_page{
+        .page_container{
+            .details{
+                display: flex;
+                flex-direction: column;
             }
         }
     }

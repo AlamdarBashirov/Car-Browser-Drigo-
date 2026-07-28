@@ -21,11 +21,19 @@ const Toast = () => {
     }
     return (
         <div className={styles.toast}>
-            <div
-                className={`${styles.toastContainer} ${type === "success" ? styles.success : styles.error}`}
-            >
-                <p>{message}</p>
-            </div>
+            {message !== "" && (
+
+                <div
+                    className={`${styles.toastContainer} ${type === "success" ? styles.success : styles.error
+                        }`}
+                >
+                    <p>{message !== "" && message}</p>
+
+                    <div className={styles.progressBar}>
+                        <div className={styles.progress}></div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

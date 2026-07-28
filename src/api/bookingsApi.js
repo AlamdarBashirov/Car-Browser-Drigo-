@@ -22,6 +22,9 @@ let bookings = loadData("bookings", [...bookingsData])
 
 export const getBookings = async (userId) => {
     await delay(800)
+    if (Math.random() < 0.1) {
+        throw new Error("Failed to load booking");
+    }
     const allBookings = loadData("bookings")
     const bookingsOfUser = allBookings.filter(booking => booking.userId == userId)
     console.log(allBookings);
@@ -30,12 +33,20 @@ export const getBookings = async (userId) => {
 
 export const getBookingById = async (bookingId) => {
     await delay(800)
+    if (Math.random() < 0.1) {
+        throw new Error("Failed to load booking");
+    }
     const booking = bookings.find(item => item.id == bookingId)
     return booking
 }
 
 export const createBooking = async (bookingData) => {
     await delay(800)
+
+    if (Math.random() < 0.1) {
+        throw new Error("Failed to creat booking");
+    }
+
     bookings = loadData("bookings", [...bookingsData]);
     
     const allBookingsOfCar = bookings.filter(booking => booking.carId === bookingData.carId && booking.status !== "cancelled")
@@ -63,7 +74,7 @@ export const cancelBooking = async (id) => {
 
         await delay(500)
 
-        if (Math.random() < 0.99) {
+        if (Math.random() < 0.1) {
             throw new Error("Failed to cancel booking");
         }
 

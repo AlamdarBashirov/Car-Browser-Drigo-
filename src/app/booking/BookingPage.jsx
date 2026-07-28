@@ -110,10 +110,6 @@ const BookingPage = () => {
 
             setSuccess("Booking created successfully");
 
-            dispatch(showToast({
-                message: success,
-                type: "success"
-            }))
             setTimeout(() => {
                 navigate("/my-bookings");
             }, 2000);
@@ -126,6 +122,11 @@ const BookingPage = () => {
         }
     };
 
+    dispatch(showToast({
+        message: success,
+        type: "success"
+    }))
+
     useEffect(() => {
         dispatch(getCarByIdThunk(id));
         dispatch(getCurrentUserThunk());
@@ -134,8 +135,10 @@ const BookingPage = () => {
     return (
         <div className={styles.bookingPage}>
             {step === 1 && (
-                <div>
-                    <div>
+                <div className={styles.stepCard}>
+                    <h2 className={styles.stepTitle}>Choose Rental Dates</h2>
+
+                    <div className={styles.inputGroup}>
                         <label htmlFor="startDate">Start Date</label>
                         <input
                             id="startDate"
@@ -151,7 +154,7 @@ const BookingPage = () => {
                         />
                     </div>
 
-                    <div>
+                    <div className={styles.inputGroup}>
                         <label htmlFor="endDate">End Date</label>
                         <input
                             id="endDate"
@@ -167,21 +170,24 @@ const BookingPage = () => {
                     </div>
 
                     <button
-                        disabled={
-                            !bookingData.startDate || !bookingData.endDate
-                        }
+                        className={styles.actionButton}
+                        disabled={!bookingData.startDate || !bookingData.endDate}
                         onClick={handleContinue}
                     >
                         Continue
                     </button>
 
-                    {validationError && <span>{validationError}</span>}
+                    {validationError && (
+                        <span className={styles.errorMessage}>{validationError}</span>
+                    )}
                 </div>
             )}
 
             {step === 2 && (
-                <div>
-                    <div>
+                <div className={styles.stepCard}>
+                    <h2 className={styles.stepTitle}>Driver Information</h2>
+
+                    <div className={styles.inputGroup}>
                         <label htmlFor="driverName">Driver Name</label>
                         <input
                             id="driverName"
@@ -199,7 +205,7 @@ const BookingPage = () => {
                         />
                     </div>
 
-                    <div>
+                    <div className={styles.inputGroup}>
                         <label htmlFor="driverEmail">Driver Email</label>
                         <input
                             id="driverEmail"
@@ -218,6 +224,7 @@ const BookingPage = () => {
                     </div>
 
                     <button
+                        className={styles.actionButton}
                         disabled={
                             !bookingData.driver.name ||
                             !bookingData.driver.email
@@ -227,37 +234,82 @@ const BookingPage = () => {
                         Continue
                     </button>
 
-                    {validationError && <span>{validationError}</span>}
+                    {validationError && (
+                        <span className={styles.errorMessage}>{validationError}</span>
+                    )}
                 </div>
             )}
 
             {step === 3 && (
-                <div>
-                    <h2>Booking Details</h2>
+                <div className={styles.stepCard}>
+                    <h2 className={styles.stepTitle}>Booking Summary</h2>
 
-                    <div>
-                        <p>Car name: {selectedCar?.name}</p>
-                        <p>Transmission: {selectedCar?.transmission}</p>
-                        <p>Type: {selectedCar?.type}</p>
-                        <p>Seats: {selectedCar?.seats}</p>
-                        <p>Price per day: ${selectedCar?.pricePerDay}</p>
-
-                        <p>Driver name: {bookingData.driver.name}</p>
-                        <p>Driver email: {bookingData.driver.email}</p>
-
-                        <p>Start date: {bookingData.startDate}</p>
-                        <p>End date: {bookingData.endDate}</p>
-
-                        <p>Rental days: {rentDay}</p>
-                        <p>Service fee: ${serviceFee}</p>
-                        <p>Total price: ${totalPrice}</p>
+                    <div className={styles.summaryItem}>
+                        <span>Car</span>
+                        <strong>{selectedCar?.name}</strong>
                     </div>
 
-                    <button onClick={confirmBooking}>
+                    <div className={styles.summaryItem}>
+                        <span>Transmission</span>
+                        <strong>{selectedCar?.transmission}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>Type</span>
+                        <strong>{selectedCar?.type}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>Seats</span>
+                        <strong>{selectedCar?.seats}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>Price / Day</span>
+                        <strong>${selectedCar?.pricePerDay}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>Driver</span>
+                        <strong>{bookingData.driver.name}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>Email</span>
+                        <strong>{bookingData.driver.email}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>Start Date</span>
+                        <strong>{bookingData.startDate}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>End Date</span>
+                        <strong>{bookingData.endDate}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>Rental Days</span>
+                        <strong>{rentDay}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>Service Fee</span>
+                        <strong>${serviceFee}</strong>
+                    </div>
+
+                    <div className={styles.summaryItem}>
+                        <span>Total Price</span>
+                        <strong>${totalPrice}</strong>
+                    </div>
+
+                    <button
+                        className={styles.actionButton}
+                        onClick={confirmBooking}
+                    >
                         Confirm Booking
                     </button>
-
-                    
                 </div>
             )}
         </div>

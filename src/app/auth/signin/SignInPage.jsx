@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styles from './SignInPage.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginThunk } from '../../../redux/reducers/AuthSlice'
+import { loginThunk } from '../../../redux/reducers/authSlice'
 
 const SignInPage = () => {
     const navigate = useNavigate()
@@ -62,7 +62,7 @@ const SignInPage = () => {
                         />
                     </div>
                     {loading && <span>Signing up...</span>}
-                    {error && <span>{error}</span>}
+                    {error !== "Failed to get user info" && <span>{error}</span>}
 
 
                     <div className={styles.navigateSignUp}>

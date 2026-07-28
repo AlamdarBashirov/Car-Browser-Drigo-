@@ -1,16 +1,85 @@
 @use '../../../styles/variables' as*;
-.site_header{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 0;
+.siteHeader {
+    background: white;
     border-bottom: 2px solid $card-border-color;
-    background-color: #F2EEFF;
-    .site_header_container{
-        width: $container-width;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    .siteHeaderContainer {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 18px 32px;
+
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: center;
+
+        .logo {
+            text-decoration: none;
+            color: $card-border-color;
+            font-size: 30px;
+            font-weight: 700;
+            transition: .3s;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+
+            .navItem {
+                position: relative;
+                padding: 10px 22px;
+                border-radius: 12px;
+                text-decoration: none;
+                color: $card-border-color;
+                font-size: 16px;
+                font-weight: 600;
+                transition: .3s;
+
+                &:hover {
+                    background: $card-border-color;
+                    color: white;
+                }
+
+                &.active {
+                    background: $card-border-color;
+                    color: white;
+                }
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    left: 50%;
+                    bottom: -6px;
+                    width: 0;
+                    height: 3px;
+                    border-radius: 10px;
+                    background: $card-border-color;
+                    transform: translateX(-50%);
+                    transition: .3s;
+                }
+
+                &:hover::after,
+                &.active::after {
+                    width: 70%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 530px){
+    .siteHeader{
+        .siteHeaderContainer{
+            flex-direction: column;
+            gap: 20px;
+            align-items: start;
+        }
     }
 }

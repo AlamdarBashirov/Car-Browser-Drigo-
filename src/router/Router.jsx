@@ -20,13 +20,13 @@ const Router = () => {
                     <Route element={<Layout />}>
                         <Route element={<ProtectedRoute />}>
                             <Route path="/my-bookings" element={<MyBookings />} />
+                            <Route path="/booking/:id" element={<BookingPage />} />
+                            <Route path="/booking-detail/:id" element={<BookingDetail />} />
                         </Route>
-                            <Route path="/signup" element={<SignUpPage />} />
+                        <Route path="/signup" element={<SignUpPage />} />
                         <Route path="/" element={<Home />} />
                         <Route path="/signin" element={<SignInPage />} />
                         <Route path="/cars/:id" element={<CarDetail />} />
-                        <Route path="/booking/:id" element={<BookingPage />} />
-                        <Route path="/booking-detail/:id" element={<BookingDetail />} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>

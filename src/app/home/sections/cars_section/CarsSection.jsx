@@ -256,6 +256,10 @@ const CarsSection = () => {
         totalCount / query.limit
     )
 
+    const loadRetry = () => {
+        dispatch(getCarsThunk(query))
+    }
+
     useEffect(() => {
         dispatch(getCarsThunk(query))
     }, [query])
@@ -293,13 +297,27 @@ const CarsSection = () => {
     }, [query])
     
     if (loading) {
-        return <h1>Loading ...</h1>
+        return (
+            <div className={styles.carsSection}>
+                <div className={styles.loadingContainer}>
+                    <h1>Loading cars ...</h1>
+                </div>
+            </div>
+        )
     }
     if (error) {
         dispatch(showToast({
             message: error,
             type:error
         }))
+        return (
+            <div className={styles.carsSection}>
+                <div className={styles.loadingContainer}>
+                    <h3>{error}</h3>
+                    <button onClick={loadRetry}>Retry</button>
+                </div>
+            </div>
+        )
     }
     return (
         <>

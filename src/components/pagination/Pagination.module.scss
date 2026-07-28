@@ -1,0 +1,71 @@
+@use '../../styles/variables' as*;
+
+.pagination {
+    margin-top: 40px;
+    padding: 24px;
+    background: #F2EEFF;
+    border-radius: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    .pageButton {
+        padding: 12px 22px;
+        border: none;
+        border-radius: 10px;
+        background: $card-border-color;
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: .3s;
+
+        &:hover:not(:disabled) {
+            background: blue;
+        }
+
+        &:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+    }
+
+    .pageNumbers {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+
+        .pageNumber {
+            width: 42px;
+            height: 42px;
+            border: 2px solid $card-border-color;
+            border-radius: 10px;
+            background: white;
+            color: $card-border-color;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
+
+            &:hover {
+                background: $card-border-color;
+                color: white;
+            }
+
+            &.activePage {
+                background: $card-border-color;
+                color: white;
+            }
+        }
+    }
+
+    .pageInfo {
+        span {
+            color: $card-border-color;
+            font-size: 16px;
+            font-weight: 700;
+        }
+    }
+}

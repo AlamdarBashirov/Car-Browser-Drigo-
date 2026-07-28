@@ -11,7 +11,7 @@ const MyBookings = () => {
     const navigate = useNavigate()
 
     const { currentUser, loading, error } = useSelector((state) => state.auth)
-    const { bookings,bookingError } = useSelector((state) => state.bookings)
+    const { bookings, bookingError } = useSelector((state) => state.bookings)
     const bookingLoading = useSelector((state) => state.bookings.loading)
     const { cars, totalCount } = useSelector((state) => state.cars)
 
@@ -32,48 +32,103 @@ const MyBookings = () => {
         }));
     }, [bookings]);
 
+
     if (bookingLoading) {
-        <div>
-            <h1>Loading ...</h1>
-        </div>
+        return (
+            <div className={styles.loadingContainer}>
+                <h2>Loading...</h2>
+            </div>
+        );
     }
+
     return (
-        <div>
-            <span>{currentUser?.name}</span>
-            <div>
-                <h1>Upcoming Bookings</h1>
-                {
-                    upComingBookings && upComingBookings.map(item => {
-                        const car = cars?.find(car => car.id == item.carId)
-                        console.log(car);
+        <div className={styles.myBookingsPage}>
+
+            <h2 className={styles.userName}>
+                Welcome, {currentUser?.name}
+            </h2>
+
+            <div className={styles.bookingSection}>
+
+                <h2 className={styles.sectionTitle}>
+                    Upcoming Bookings
+                </h2>
+
+                {upComingBookings.length === 0 && <h4>You don't have upcoming bookings</h4>}
+
+                <div className={styles.bookingList}>
+                    {upComingBookings?.map((item) => {
+                        const car = cars?.find((car) => car.id == item.carId);
 
                         return (
-                            <div key={item.id} onClick={() => navigate(`/booking-detail/${item.id}`)}>
-                                <span>#{item.id}</span>
-                                <span>Driver: {item.driver.name}</span>
-                                <span>Car: {car?.name}</span>
+                            <div
+                                key={item.id}
+                                className={styles.bookingCard}
+                                onClick={() => navigate(`/booking-detail/${item.id}`)}
+                            >
+                                <span>
+                                    <strong>Booking:</strong> #{item.id}
+                                </span>
+                                <span>
+                                    <strong>Start date:</strong> {item.startDate}
+                                </span>
+                                <span>
+                                    <strong>End date:</strong> {item.endDate}
+                                </span>
+                                <span>
+                                    <strong>Driver:</strong> {item.driver.name}
+                                </span>
+                                <span>
+                                    <strong>Car:</strong> {car?.name}
+                                </span>
                             </div>
-                        )
-                    })
-                }
+                        );
+                    })}
+                </div>
+
             </div>
-            <div>
-                <h1>Past Bookings</h1>
-                {
-                    pastBookings && pastBookings.map(item => {
-                        const car = cars?.find(car => car.id == item.carId)
-                        console.log(car);
+
+            <div className={styles.bookingSection}>
+
+                <h2 className={styles.sectionTitle}>
+                    Past Bookings
+                </h2>
+
+                {pastBookings.length === 0 && <h4>You don't have past bookings</h4>}
+
+
+                <div className={styles.bookingList}>
+                    {pastBookings?.map((item) => {
+                        const car = cars?.find((car) => car.id == item.carId);
 
                         return (
-                            <div key={item.id} onClick={() => navigate(`/booking-detail/${item.id}`)}>
-                                <span>#{item.id}</span>
-                                <span>Driver: {item.driver.name}</span>
-                                <span>Car: {car?.name}</span>
+                            <div
+                                key={item.id}
+                                className={styles.bookingCard}
+                                onClick={() => navigate(`/booking-detail/${item.id}`)}
+                            >
+                                <span>
+                                    <strong>Booking:</strong> #{item.id}
+                                </span>
+                                <span>
+                                    <strong>Start date:</strong> {item.startDate}
+                                </span>
+                                <span>
+                                    <strong>End date:</strong> {item.endDate}
+                                </span>
+                                <span>
+                                    <strong>Driver:</strong> {item.driver.name}
+                                </span>
+                                <span>
+                                    <strong>Car:</strong> {car?.name}
+                                </span>
                             </div>
-                        )
-                    })
-                }
+                        );
+                    })}
+                </div>
+
             </div>
+
         </div>
     )
 }

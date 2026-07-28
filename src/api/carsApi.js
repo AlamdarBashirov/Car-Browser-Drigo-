@@ -74,6 +74,9 @@ export const getCars = async (query = {}) => {
 
 export const getCar = async (id) => {
   await delay(800)
+  if (Math.random() < 0.1) {
+    throw new Error("Failed to fetch car");
+  }
   const car = cars.find(car => car.id == id)
 
   if (!car) {

@@ -52,32 +52,104 @@ const BookingDetail = () => {
     }
     return (
         <>
-            <div>
-                <h3>Booking №: {selectedBooking?.id} {selectedBooking?.status}</h3>
-                <h3>Start date: {selectedBooking?.startDate}</h3>
-                <h3>End date: {selectedBooking?.endDate}</h3>
-                <h3>Created date{selectedBooking?.createdAt}</h3>
-                <h3>Driver name: {selectedBooking?.driver.name}</h3>
-                <h3>Driver Email: {selectedBooking?.driver.email}</h3>
-                <h3>Rental days: {selectedBooking?.rentDay}</h3>
-                <h3>Service fee: {selectedBooking?.serviceFee} $</h3>
-                <h3>Price  per day: {selectedCar?.pricePerDay} $</h3>
-                <h3>totalprice: {selectedBooking?.totalPrice} $</h3>
-            </div>
-            <div>
-                <h1>car details</h1>
-                <h3>Name: {selectedCar?.name}</h3>
-                <h3>Seats: {selectedCar?.seats}</h3>
-                <h3>Transmission: {selectedCar?.transmission}</h3>
-                <h3>Type: {selectedCar?.type}</h3>
-            </div>
-            <button
-                onClick={cancelBooking}
-                disabled={selectedBooking?.status === "cancelled"}
-            >
-                Cancel Booking
-            </button>
-            {error && <span>{error}</span>}
+            <section className={styles.bookingDetailsSection}>
+                <div className={styles.detailsWrapper}>
+
+                    <div className={styles.detailsCard}>
+                        <h2 className={styles.cardTitle}>Booking Details</h2>
+
+                        <div className={styles.detailItem}>
+                            <span>Booking №</span>
+                            <strong>{selectedBooking?.id}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Status</span>
+                            <strong>{selectedBooking?.status}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Start Date</span>
+                            <strong>{selectedBooking?.startDate}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>End Date</span>
+                            <strong>{selectedBooking?.endDate}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Created At</span>
+                            <strong>{selectedBooking?.createdAt}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Driver</span>
+                            <strong>{selectedBooking?.driver.name}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Email</span>
+                            <strong>{selectedBooking?.driver.email}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Rental Days</span>
+                            <strong>{selectedBooking?.rentDay}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Service Fee</span>
+                            <strong>{selectedBooking?.serviceFee} $</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Total Price</span>
+                            <strong>{selectedBooking?.totalPrice} $</strong>
+                        </div>
+                    </div>
+
+                    <div className={styles.detailsCard}>
+                        <h2 className={styles.cardTitle}>Car Details</h2>
+
+                        <div className={styles.detailItem}>
+                            <span>Name</span>
+                            <strong>{selectedCar?.name}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Seats</span>
+                            <strong>{selectedCar?.seats}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Transmission</span>
+                            <strong>{selectedCar?.transmission}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Type</span>
+                            <strong>{selectedCar?.type}</strong>
+                        </div>
+
+                        <div className={styles.detailItem}>
+                            <span>Price / Day</span>
+                            <strong>{selectedCar?.pricePerDay} $</strong>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button
+                    className={styles.cancelButton}
+                    onClick={cancelBooking}
+                    disabled={selectedBooking?.status === "cancelled"}
+                >
+                    Cancel Booking
+                </button>
+
+                {error && <p className={styles.errorMessage}>{error}</p>}
+            </section>
         </>
     )
 }
