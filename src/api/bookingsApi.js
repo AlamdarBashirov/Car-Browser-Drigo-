@@ -64,9 +64,9 @@ export const createBooking = async (bookingData) => {
 
     export const cancelBooking = async (id) => {
 
-        await delay(5000)
+        await delay(500)
 
-        if (Math.random() < 0.99) {
+        if (Math.random() < 0.1) {
             throw new Error("Failed to cancel booking");
         }
 

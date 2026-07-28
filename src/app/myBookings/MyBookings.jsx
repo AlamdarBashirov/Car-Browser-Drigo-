@@ -24,6 +24,9 @@ const MyBookings = () => {
         dispatch(getCarsThunk({page: 1,
             limit: 9999}));
     }, [bookings]);
+
+    console.log("my book",bookings);
+    
     
   return (
     <div>

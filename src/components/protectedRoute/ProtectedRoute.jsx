@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
 
     const navigate = useNavigate()
 
     const { currentUser, initialized} = useSelector((state) => state.auth)
-    console.log("protected", currentUser);
     
     useEffect(() => {
         if (initialized && !currentUser) {
@@ -19,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
         return <h1>Loading...</h1>;
     }
     return (
-        <div>{children}</div>
+        <div><Outlet/></div>
     )
 }
 
