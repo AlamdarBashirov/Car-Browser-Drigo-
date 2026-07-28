@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import styles from './SignInPage.module.scss'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom' // 1. useLocation əlavə olundu
 import { useDispatch, useSelector } from 'react-redux'
 import { loginThunk } from '../../../redux/reducers/authSlice'
 
 const SignInPage = () => {
     const navigate = useNavigate()
+    const location = useLocation()
     const dispatch = useDispatch()
+
+    const from = location.state?.from?.pathname || "/"
 
     const { currentUser, loading, error } = useSelector(state => state.auth)
 
@@ -22,9 +25,9 @@ const SignInPage = () => {
 
     useEffect(() => {
         if (currentUser){
-            navigate("/")
+            navigate(from, { replace: true })
         }
-    }, [currentUser, navigate])
+    }, [currentUser, navigate, from])
 
 
     return (
