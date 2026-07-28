@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import styles from './BookingDetail.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getBookingByIdThunk } from '../../../redux/reducers/bookingSlice'
+import { cancelBookingThunk, getBookingByIdThunk } from '../../../redux/reducers/bookingSlice'
 import { getCarByIdThunk } from '../../../redux/reducers/carsSlice'
 
 const BookingDetail = () => {
@@ -21,14 +21,17 @@ const BookingDetail = () => {
         }
     }, [selectedBooking])
 
-    console.log(selectedBooking);
-    console.log(selectedCar);
-
+    const cancelBooking = () => {
+        if (selectedBooking) {
+            dispatch(cancelBookingThunk(selectedBooking.id))
+        }
+        return selectedBooking
+    }
 
     return (
         <>
             <div>
-                <h3>Booking №: {selectedBooking?.id}</h3>
+                <h3>Booking №: {selectedBooking?.id} {selectedBooking?.status}</h3>
                 <h3>Start date: {selectedBooking?.startDate}</h3>
                 <h3>End date: {selectedBooking?.endDate}</h3>
                 <h3>Created date{selectedBooking?.createdAt}</h3>
@@ -46,7 +49,9 @@ const BookingDetail = () => {
                 <h3>Transmission: {selectedCar?.transmission}</h3>
                 <h3>Type: {selectedCar?.type}</h3>
             </div>
-            <button>
+            <button
+                onClick={cancelBooking}
+            >
                 Cancel Booking
             </button>
         </>

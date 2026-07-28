@@ -67,7 +67,7 @@ export const createBooking = async (bookingData) => {
         await delay(800)
         bookings = loadData("bookings", [...bookingsData]);
 
-        const booking = bookings.find(booking => booking.id === id)
+        const booking = bookings.find(booking => booking.id == id)
 
         if (!booking) {
             throw new Error("Booking not found");
